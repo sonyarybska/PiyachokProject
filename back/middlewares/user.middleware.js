@@ -1,8 +1,6 @@
-const url = require("express/lib/response");
-
-const {generateTokens} = require("../services/auth.service");
 const {verifyGoogleId} = require("../services/auth.service");
-const db = require('../PgSql').getInstance()
+const db = require('../PgSql').getInstance();
+
 module.exports = {
 
     checkGoogleId: async (req, res, next) => {

@@ -1,6 +1,5 @@
 import {updateEstablishments} from "../../../services/establishment.service";
 
-
 export function AdminApplication({item}) {
     return (
         <div>

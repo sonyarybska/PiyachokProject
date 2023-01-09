@@ -5,7 +5,6 @@ const {
     updateEstablishmentPhotos,
     getEstablishmentsFiles
 } = require("../helpers/fileUploader.helper");
-const {login} = require("./auth.controller");
 
 module.exports = {
     getEstablishments: async (req, res) => {

@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import './EstablishmentInfo.css';
 import {fetchOneEstablishment} from "../../services/establishment.service";
 import {Route, Routes, Link, useLocation} from "react-router-dom";
