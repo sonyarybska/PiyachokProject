@@ -1,8 +1,8 @@
 const authService = require("../services/auth.service");
-const messagesEnum = require("../../../../back/errors/message-enum");
-const {statusEnum} = require("../../../../back/errors/index");
+const messagesEnum = require("./../errors/message-enum");
+const {statusEnum} = require("./../errors/index");
 const db = require('../PgSql').getInstance();
-const {ApiError} = require("../../../../back/errors/ApiError");
+const {ApiError} = require("./../errors/ApiError");
 
 module.exports = {
     checkAccessToken: async (req, res, next) => {
