@@ -18,7 +18,7 @@ module.exports = {
     getOneUser: async (req, res) => {
         try {
             const model = db.getModel('User');
-
+            console.log(req.params);
             const item = await model.findAll({where: {user_id: req.params.id}});
 
             res.json(item);
@@ -93,11 +93,26 @@ module.exports = {
 
             const {id} = req.params;
 
-            const data = await Review.findAll({where: {user_id: id}, include: [{model: Establishment, as: 'establishment'}]});
+            const data = await Review.findAll({
+                where: {user_id: id},
+                include: [{model: Establishment, as: 'establishment'}]
+            });
 
             res.json(data);
         } catch (e) {
             res.json(e.message);
+        }
+    },
+
+    getFavorite: async (req, res) => {
+        try {
+            const model = db.getModel('Favorite');
+
+            const favorite = await model.findAll({});
+
+            res.json(favorite);
+        } catch (e) {
+            res.json(e.message)
         }
     },
 
@@ -106,15 +121,43 @@ module.exports = {
             const model = db.getModel('Favorite');
 
             const {establishment_id} = req.body;
-            console.log(req.params);
-            console.log(establishment_id);
-            console.log(id);
 
-            const a = await model.findAll({});
+            const {id} = req.params;
 
-            console.log(a);
+            await model.create({user_id: id, establishment_id}, {returning: true, plain: true});
 
-            res.json(a);
+            res.json('ok');
+        } catch (e) {
+            res.json(e.message);
+        }
+    },
+
+    getFavoriteByUserId: async (req, res) => {
+        try {
+            const Favorite = db.getModel('Favorite');
+            const Establishment = db.getModel('Establishment');
+
+            const {id} = req.params;
+
+            const userFavorite = await Favorite.findAll({where: {user_id: id}, include:Establishment});
+
+            console.log(userFavorite);
+
+            res.json(userFavorite);
+        } catch (e) {
+            res.json(e.message)
+        }
+    },
+
+    deleteFavorite: async (req, res) => {
+        try {
+            const {id, est_id} = req.params;
+
+            const model = db.getModel('Favorite');
+
+            await model.destroy({where: {user_id: id, establishment_id: est_id}});
+
+            res.json('deleted');
         } catch (e) {
             res.json(e.message);
         }

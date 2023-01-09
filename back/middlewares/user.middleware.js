@@ -31,5 +31,19 @@ module.exports = {
         req.body = {name, email, picture};
 
         next();
+    },
+
+    checkFavoriteExist: async (req, res, next) => {
+        const Favorite = db.getModel('Favorite');
+        const {id} = req.params;
+        const {establishment_id} = req.body;
+
+        const favorite = await Favorite.findOne({where: {establishment_id, user_id:id}});
+
+        if(favorite){
+            return;
+        }
+
+        next();
     }
 }

@@ -29,7 +29,9 @@ export function UserMenu({user, logoutResponse}){
                                 <NavLink to={'/settings'}>
                                     {<li>Settings</li>}
                                 </NavLink>
-
+                                <NavLink to={'/favorites'}>
+                                    {<li>My favorites</li>}
+                                </NavLink>
                             </div>
                         </ul>
                     </li>

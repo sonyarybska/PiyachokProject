@@ -1,6 +1,6 @@
 import './App.css';
 import {useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {Header} from "./components/header/Header";
 import {Establishments} from "./components/establishments/Establishments";
 import {
@@ -16,6 +16,7 @@ import {EstablishmentInfo} from "./components/establishment-info/EstablishmentIn
 import {PreviewSlider} from "./components/establishment-info/preview-slider/PreviewSlider";
 import {ConfirmationPage} from "./components/confirmation-page/ConfirmationPage";
 import {MyReviewsPage} from "./components/my-reviews-page/MyReviewsPage";
+import {Favorites} from "./components/favorites/Favorites";
 
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
                 <Route path={'/my-establishments/*'} element={<CrudEstablishmentsPage/>}/>
                 <Route path={'/applications'} element={<AdminApplications/>} authed={true}/>
                 <Route path={'/settings'} element={<Settings/>}/>
+                <Route path={'/favorites'} element={<Favorites/>}/>
                 <Route path={'/my-reviews'} element={<MyReviewsPage/>}/>
                 <Route path={'/adv/:title/previewSlider'} element={''}/>
                 <Route path={'/adv/:title/*'} element={<EstablishmentInfo/>}/>

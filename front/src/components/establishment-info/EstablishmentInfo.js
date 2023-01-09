@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {createRef, useEffect, useState} from "react";
 import './EstablishmentInfo.css';
 import {fetchOneEstablishment} from "../../services/establishment.service";
 import {Route, Routes, Link, useLocation} from "react-router-dom";
@@ -7,6 +7,7 @@ import {getOneEstablishments} from "../../redux/actions/actions";
 
 import {Reviews} from "../reviews/Reviews";
 import {News} from "../news/News";
+import {addToFavorite, changeFavorite} from "../../helpers/favorite.helper";
 
 export function EstablishmentInfo() {
     const {one_establishment} = useSelector(state => state.establishmentReducer);
@@ -17,7 +18,11 @@ export function EstablishmentInfo() {
 
     let [image, setImage] = useState(state?.image === undefined ? 0 : state?.image);
 
+    const [favorite, setFavorite] = useState(false);
+
     const imagesLength = one_establishment?.photos?.length;
+
+    const favoriteIcon = createRef();
 
     useEffect(async () => {
         const item = await fetchOneEstablishment(state?.establishment_id);
@@ -41,6 +46,17 @@ export function EstablishmentInfo() {
         }
     }
 
+    const addToFavoriteList = async (e) => {
+        await addToFavorite(e, favoriteIcon, user_id, one_establishment);
+
+        setFavorite(true);
+    }
+
+    useEffect(() => {
+        changeFavorite(one_establishment, favoriteIcon);
+        setFavorite(false);
+    }, [favorite, one_establishment]);
+
     return (
         <div className={'info-container'}>
             <div>
@@ -48,9 +64,10 @@ export function EstablishmentInfo() {
                 {
                     <div className={'slider'}>
                         <button onClick={prevImage}>{'<'}</button>
-                        <Link to={`previewSlider?index=${image}`}
-                              state={{title: one_establishment.title}}>
-                            <div className={'slide'}>
+
+                        <div className={'slide'}>
+                            <Link to={`previewSlider?index=${image}`}
+                                  state={{title: one_establishment.title}}>
                                 <div className={'image'} style={{
                                     background: `url(${'http://localhost:4000/' + one_establishment?.photos?.[image]?.replace(/\\/g, '/')}) center center / cover no-repeat`,
                                 }}>
@@ -65,18 +82,19 @@ export function EstablishmentInfo() {
                                         }
                                     </div>
                                 </div>
-                            </div>
-                        </Link>
+                            </Link>
 
+
+                            <i onClick={(e) => addToFavoriteList(e)} ref={favoriteIcon} className="fa fa-heart"
+                               style={{fontSize: "34", color: 'black'}}></i>
+                        </div>
                         <button onClick={nextImage}>{'>'}</button>
-
-
                     </div>
                 }
             </div>
             <div>
                 <p>News</p>
-                {one_establishment.user_id === user_id ? <News/>: ''}
+                {one_establishment.user_id === user_id ? <News/> : ''}
             </div>
 
             <Routes>

@@ -2,6 +2,8 @@ const {DataTypes, Sequelize} = require('sequelize');
 const db = require('../../PgSql').getInstance();
 
 module.exports = (client) => {
+    const Establishment = db.getModel('Establishment');
+
     const Favorite = client.define(
         'favorite', {
             favorite_id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
@@ -23,6 +25,9 @@ module.exports = (client) => {
             timestamps: true
         }
     );
+
+    Establishment.hasOne(Favorite, {foreignKey: 'establishment_id'});
+    Favorite.belongsTo(Establishment, {foreignKey: 'establishment_id'});
 
     return Favorite;
 }

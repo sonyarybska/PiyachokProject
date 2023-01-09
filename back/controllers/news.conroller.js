@@ -11,20 +11,18 @@ module.exports = {
     },
 
     createNews: async (req, res) => {
-        console.log(req.body);
+
         res.json('created');
     },
 
     getNewsByEstablishmentId: async (req,res)=>{
-        res.json('sjjsj')
+        res.json('response')
     },
 
     getNewsTypes: async (req, res)=>{
         const Type_News = db.getModel('Type_News');
 
         const types = await Type_News.findAll({});
-
-        console.log(types);
 
         res.json(types);
     }
