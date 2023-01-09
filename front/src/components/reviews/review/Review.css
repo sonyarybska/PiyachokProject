@@ -1,0 +1,7 @@
+.item-review{
+    width: 200px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
+}

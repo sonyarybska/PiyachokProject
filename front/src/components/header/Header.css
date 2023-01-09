@@ -1,0 +1,168 @@
+@import url('https://fonts.googleapis.com/css2?family=Neonderthaw&display=swap');
+
+
+* {
+    box-sizing: border-box;
+}
+
+.header {
+    width: 100%;
+    height: 150px;
+    background-color: black;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    width: 11000px;
+    height: 100%;
+    margin: 0 auto;
+
+}
+
+.title {
+    color: white;
+    font-family: 'Neonderthaw', cursive;
+    font-size: 60px;
+}
+
+.logo {
+    width: 60px;
+    height: 60px;
+}
+
+.logo_title {
+    display: flex;
+    align-items: center;
+    column-gap: 20px;
+}
+
+.container a {
+    text-decoration: none;
+}
+
+.icon {
+    left: 80%;
+    width: 250px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.find_form {
+    width: 300px;
+    margin: 0 auto;
+}
+
+
+.find_form input, .find_form button {
+    outline: none;
+    background: transparent;
+}
+
+.find_form input {
+    width: 100%;
+    height: 42px;
+    padding-left: 15px;
+    border: 3px solid #F9F0DA;
+    color: white;
+}
+
+
+#search {
+    display: flex;
+    align-items: center;
+    color: white;
+    border: none;
+    height: 42px;
+    width: 30px;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+}
+
+#search:before {
+    font-size: 16px;
+    color: #ffffff;
+}
+
+.find_form input:focus {
+    background-color: white;
+    color: black;
+}
+
+.find_form input:focus + #search {
+    color: black;
+
+}
+
+.login-btn {
+    width: 100px;
+}
+
+.err {
+    font-size: 15px;
+    color: white;
+}
+
+.nav-menu {
+    width: 100px;
+    padding: 0;
+    color: white;
+}
+
+.profile {
+    list-style: none;
+}
+
+.list {
+    list-style: none;
+    position: absolute;
+    margin-left: -5%;
+    padding: 0;
+    color: black;
+    display: none;
+    background-color: white;
+    border: 2px solid black;
+}
+
+.list li {
+    text-align: center;
+}
+
+.profile:hover > ul {
+    display: block;
+}
+
+.profile:after {
+    content: '\02C5';
+    margin-left: 10px;
+    font-weight: 700;
+}
+
+.profile_info {
+    display: flex;
+}
+
+.profile_info img {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+
+.profile-info div {
+    display: flex;
+    flex-direction: column;
+}
+
+#name {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+#email {
+    font-size: 15px;
+}
+

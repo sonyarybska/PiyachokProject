@@ -1,0 +1,44 @@
+.preview_container{
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px;
+    position: relative;
+}
+
+.preview_slide {
+    width: 450px;
+    height:550px;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.swiper_container {
+    display: flex;
+    column-gap: 10px;
+    padding: 20px;
+}
+.act{
+    border: 10px solid white;
+}
+
+.swiper_slide {
+    width: 100px;
+    height: 130px;
+}
+
+.pagination{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 30px;
+}
+.close_icon{
+    position: absolute;
+    top:20px;
+    right: 100px;
+    color: white;
+}

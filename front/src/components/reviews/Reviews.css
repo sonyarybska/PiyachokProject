@@ -1,0 +1,14 @@
+.reviews-box{
+    background-color: white;
+    margin: 40px;
+    padding: 20px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.input-form{
+    margin: 10px;
+}

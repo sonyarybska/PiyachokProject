@@ -1,0 +1,23 @@
+.review-item{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.establishment-item-review{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: 200px;
+}
+
+.establishment-item-review-avatar{
+    width: 150px;
+    height: 150px;
+}
+
+.review-text p{
+    width: 300px;
+    word-wrap: break-word;
+}
