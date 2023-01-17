@@ -1,33 +1,28 @@
 import './Header.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {useDispatch, useSelector} from "react-redux";
-import {Link, useNavigate} from "react-router-dom";
-import {useEffect, useRef} from "react";
+import {Link} from "react-router-dom";
+import {useEffect, useRef, useState} from "react";
 
-import {setAuth, setValue} from "../../redux/actions/actions";
+import {setAuth} from "../../redux/actions/actions";
 import {login, logout} from "../../services/auth.service";
 import {UserMenu} from "../user-menu/UserMenu";
+import {fetchEstablishments} from "../../services/establishment.service";
 
 
 export function Header() {
     const {isAuth, user} = useSelector(state => state.userReducer);
-    const {search_value} = useSelector(state => state.establishmentReducer);
+    const [search_title, setSearch_title] = useState(false);
 
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        if (search_value.length) {
-            navigate({pathname: '/', search: `?search_value=${search_value}`});
-        }
-        else {
-            navigate({pathname:'/'});
-        }
+        dispatch(fetchEstablishments(search_title));
     }
 
     const onChange = (e) => {
-        dispatch(setValue(e.target.value))
+        setSearch_title(e.target.value);
     }
 
     const btn = JSON.parse(localStorage.getItem('button'));

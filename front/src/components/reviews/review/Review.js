@@ -1,5 +1,5 @@
 import './Review.css';
-import ReactStars from "react-stars";
+import ReactStars from 'react-stars'
 
 export function Review({review}){
     return(

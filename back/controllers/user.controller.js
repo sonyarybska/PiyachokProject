@@ -7,7 +7,7 @@ module.exports = {
         try {
             const model = db.getModel('User');
 
-            const items = await model.findAll();
+            const items = await model.findAll({});
 
             res.json(items);
         } catch (e) {
@@ -97,7 +97,7 @@ module.exports = {
                 where: {user_id: id},
                 include: [{model: Establishment, as: 'establishment'}]
             });
-
+            console.log(data);
             res.json(data);
         } catch (e) {
             res.json(e.message);

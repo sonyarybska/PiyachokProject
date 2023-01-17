@@ -20,8 +20,8 @@ export function UserMenu({user, logoutResponse}){
                                 <NavLink to={'/my-establishments'}>
                                     <li>My establishments</li>
                                 </NavLink>
-                                <NavLink to={'/applications'}>
-                                    {user.admin && <li>Applications</li>}
+                                <NavLink to={'/admin-page'}>
+                                    {user.admin && <li>Admin page</li>}
                                 </NavLink>
                                 <NavLink to={'/my-reviews'} state={{user_id:user.user_id}}>
                                     {<li>My reviews</li>}

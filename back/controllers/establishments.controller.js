@@ -2,16 +2,15 @@ const db = require('../PgSql').getInstance();
 
 const {
     postEstablishmentPhotos,
-    updateEstablishmentPhotos,
-    getEstablishmentsFiles
+    updateEstablishmentPhotos
 } = require("../helpers/fileUploader.helper");
+
+const {establishmentRepository} = require("../repository/index");
 
 module.exports = {
     getEstablishments: async (req, res) => {
         try {
-            const model = db.getModel('Establishment');
-
-            const items = await model.findAll();
+            const items = await establishmentRepository.find(req.query);
 
             res.json(items);
         } catch (e) {
@@ -36,7 +35,6 @@ module.exports = {
             const model = db.getModel('Establishment');
 
             const photos = req.files;
-
 
             let {location, user_id} = req.body;
 
@@ -85,9 +83,11 @@ module.exports = {
 
             const {approved} = req.body;
 
+            let updated=[];
+
             if (req.body.data) {
                 const {title, type, tags, start_work, end_work, phone} = JSON.parse(req.body.data);
-                await model.update({
+               updated = await model.update({
                     title,
                     type,
                     tags,
@@ -102,9 +102,8 @@ module.exports = {
                 await model.update({...req.body}, {where: {establishment_id: req.params.id}, returning: true, plain: true});
             }
 
-
             if (req.files) {
-                await updateEstablishmentPhotos(user_id, updated[1].dataValues.establishment_id, files, model);
+                await updateEstablishmentPhotos(user_id, updated[1].dataValues.establishment_id, req.files, model);
             }
 
             res.json('updated');

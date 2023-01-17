@@ -3,7 +3,7 @@ import {updateEstablishments} from "../../../services/establishment.service";
 export function AdminApplication({item}) {
     return (
         <div>
-            <h1>{item.title}</h1>
+            <h1>{item?.title}</h1>
             <button onClick={() => updateEstablishments({
                 approved: true,
                 pending: false,

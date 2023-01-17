@@ -9,17 +9,18 @@ import {
 } from "react-router-dom";
 
 
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setUsersEstablishments} from "../../redux/actions/actions";
 import {StateEstablishments} from "./state-establishments/StateEstablishments";
 
 export function UsersEstablishments() {
+    const {establishments} = useSelector(state => state.establishmentReducer);
     const dispatch = useDispatch();
     const {user_id} = decode();
 
     useEffect(() => {
         getUsersEstablishments(user_id).then(items => dispatch(setUsersEstablishments([...items.data.data])))
-    }, []);
+    }, [establishments]);
 
 
     return (

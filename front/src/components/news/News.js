@@ -30,7 +30,7 @@ export function News() {
                     <input name={'text'} value={news.text} onChange={onChange} type="text"/>
                     <select name={'type'} value={news.type} onChange={onChange}>
                         {
-                            types.map(value => <option value={value.type}>{value.type}</option>)
+                            types.map(value => <option key={value.type_id} value={value.type}>{value.type}</option>)
                         }
                     </select>
                     <input onChange={onChangeFile} type="file"/>

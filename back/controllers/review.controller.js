@@ -1,3 +1,4 @@
+const sequelize = require("sequelize");
 const db = require('../PgSql').getInstance();
 
 module.exports = {
@@ -18,9 +19,23 @@ module.exports = {
 
     postReview: async (req, res) => {
         const model = db.getModel('Review');
-        console.log(req.body);
+
         const created = await model.create({...req.body});
 
         res.json(created);
+    },
+
+    getAverageRatingById: async (req, res) => {
+        const model = db.getModel('Review');
+        const {id} = req.params;
+
+        const avgRatings = await model.findAll({
+            where:
+                {establishment_id: +id},
+            attributes: [[sequelize.fn('coalesce', sequelize.fn('AVG', sequelize.col('rating')), 1), 'avgRating']]
+
+        })
+
+        res.json(avgRatings);
     }
 }

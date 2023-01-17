@@ -10,13 +10,13 @@ import {
 } from "react-router-dom";
 import {checkAuth} from "./services/auth.service";
 import {CrudEstablishmentsPage} from "./components/crud-establishments-page/CrudEstablishmentsPage";
-import {AdminApplications} from "./components/admin-applications/AdminApplications";
 import {Settings} from "./components/settings/Settings";
 import {EstablishmentInfo} from "./components/establishment-info/EstablishmentInfo";
 import {PreviewSlider} from "./components/establishment-info/preview-slider/PreviewSlider";
 import {ConfirmationPage} from "./components/confirmation-page/ConfirmationPage";
 import {MyReviewsPage} from "./components/my-reviews-page/MyReviewsPage";
 import {Favorites} from "./components/favorites/Favorites";
+import {AdminMenu} from "./components/admin-menu/AdminMenu";
 
 
 function App() {
@@ -40,7 +40,7 @@ function App() {
             <Routes>
                 <Route path={'/'} element={<Establishments/>}/>
                 <Route path={'/my-establishments/*'} element={<CrudEstablishmentsPage/>}/>
-                <Route path={'/applications'} element={<AdminApplications/>} authed={true}/>
+                <Route path={'/admin-page/*'} element={<AdminMenu/>}/>
                 <Route path={'/settings'} element={<Settings/>}/>
                 <Route path={'/favorites'} element={<Favorites/>}/>
                 <Route path={'/my-reviews'} element={<MyReviewsPage/>}/>

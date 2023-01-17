@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import ReactStars from 'react-stars'
 
 import './Reviews.css';
-import {fetchReviews, postReview} from "../../services/review.service";
+import {fetchReviewsByEstablishmentId, postReview} from "../../services/review.service";
 import {useDispatch, useSelector} from "react-redux";
 import {Review} from "./review/Review";
 
@@ -17,7 +17,7 @@ export function Reviews({establishment_id}) {
 
     useEffect(() => {
         if (establishment_id) {
-            dispatch(fetchReviews(establishment_id))
+            dispatch(fetchReviewsByEstablishmentId(establishment_id))
         }
     }, [])
 

@@ -1,12 +1,9 @@
-import {getEstablishments} from "../redux/actions/actions";
 import axiosInstance from "./axios.service";
 
+const fetchEstablishments = async (page, limit, title, sort, type, filterByRating,filterByCheck) => {
+    const response = await axiosInstance.get(`/establishments`, {params: {page, limit, title, sort, type, filterByRating,filterByCheck}});
 
-const fetchEstablishments = () => {
-    return async (dispatch) => {
-        const response = await axiosInstance.get('/establishments');
-        dispatch(getEstablishments(response.data));
-    }
+    return response;
 }
 
 const fetchOneEstablishment = async (id) => {
@@ -22,7 +19,7 @@ const postEstablishments = async (data) => {
 
 const getFilesEstablishments = async (id, user_id) => {
     const response = await axiosInstance.get(`/establishments/files/${id}/${user_id}`);
-    console.log(response);
+
     return response;
 }
 

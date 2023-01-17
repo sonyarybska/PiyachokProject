@@ -1,19 +1,55 @@
-.establishment-item{
+.establishment-item {
     width: 300px;
-    height: 300px;
+    height: 500px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     background-color: white;
+    overflow: visible;
 }
 
-.establishment-item a{
+.establishment-item a {
     text-decoration: none;
     color: black;
 }
 
-.avatar{
+.avatar {
     height: 200px;
     width: 250px;
 }
+
+.filter-box {
+    display: flex;
+    height: 100px;
+    justify-content: center;
+    align-items: center;
+    column-gap: 20px;
+}
+
+.filter-item{
+    display: flex;
+   flex-direction: column;
+    align-items: start;
+}
+
+.filter-item p{
+   margin: 0;
+}
+
+.filter-item select{
+    height: 30px;
+}
+
+.between-form {
+    display: flex;
+    flex-direction: row;
+    column-gap: 5px;
+    margin: 0;
+}
+
+.between-form input {
+    width: 100px;
+    height: 30px;
+}
+

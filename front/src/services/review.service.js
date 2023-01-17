@@ -2,19 +2,26 @@ import axiosInstance from "./axios.service";
 import {setReviews} from "../redux/actions/actions";
 
 
-const fetchReviews = (id) => {
+const fetchReviewsByEstablishmentId = (id) => {
     return async (dispatch) => {
         const response = await axiosInstance.get(`/reviews/${id}`);
-        console.log(response);
+
         dispatch(setReviews(response.data));
     }
 }
 
+const fetchRatingByEstablishmentId = async (id) => {
+    const response = await axiosInstance.get(`/reviews/${id}/rating`);
+
+    return response.data;
+}
+
+
 const postReview = async (data) => {
     const response = await axiosInstance.post('/reviews', data);
-    console.log(response);
+
     return response;
 }
 
 
-export {fetchReviews, postReview};
+export {fetchReviewsByEstablishmentId, postReview, fetchRatingByEstablishmentId};

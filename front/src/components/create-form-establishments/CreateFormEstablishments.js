@@ -1,7 +1,12 @@
 import './CreateFormEsrablishments.css';
 import {createRef, useEffect, useState} from "react";
 
-import {getTypeEstablishments, postEstablishments, updateEstablishments} from "../../services/establishment.service";
+import {
+    fetchEstablishments,
+    getTypeEstablishments,
+    postEstablishments,
+    updateEstablishments
+} from "../../services/establishment.service";
 import {decode} from "../../services/auth.service";
 import {Reorder} from "framer-motion";
 
@@ -16,7 +21,7 @@ export function CreateFormEstablishments() {
     const dispatch = useDispatch();
     const currentPath = pathname?.split('/').pop();
 
-    const [data, setData] = useState({title: '', type: '', tags: '', start_work: '', end_work: '', phone: ''});
+    const [data, setData] = useState({title: '', type: '', tags: '', start_work: '', end_work: '', phone: '', average_check:''});
 
     const [location, setLocation] = useState('');
     const [files, setFiles] = useState([]);
@@ -94,6 +99,8 @@ export function CreateFormEstablishments() {
         formData.append("user_id", user_id);
         formData.append("location", location);
         currentPath === 'update' ? await updateEstablishments(formData, state.establishment_id) : await postEstablishments(formData);
+
+        dispatch(fetchEstablishments());
     }
 
     const onChange = (e) => {
@@ -147,6 +154,7 @@ export function CreateFormEstablishments() {
                 <input type="time" value={data.end_work} name={'end_work'}
                        placeholder={'end work'}
                        onChange={onChange}/>
+                <input value={data.average_check} name={'average_check'} placeholder={'average check'} onChange={onChange} type="text"/>
             </div>
 
             {<div className={'photo-section'}>

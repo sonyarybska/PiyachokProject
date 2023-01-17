@@ -57,12 +57,11 @@ module.exports = {
                 await unlinkPromise(path.join(uploadPath, file))
             }
 
-            model.update({avatar: '', photos: []}, {where: {establishment_id}});
-
-
             if (establishment_photos) {
-              return await writeFiles(establishment_photos, pathWithoutStatic, uploadPath, model, establishment_id);
+                return await writeFiles(establishment_photos, pathWithoutStatic, uploadPath, model, establishment_id);
             }
+
+            model.update({avatar: '', photos: []}, {where: {establishment_id}});
 
         } catch (e) {
             console.log(e);

@@ -12,7 +12,7 @@ import {
 
 
 const getUsers = (data) => {
-    return {type: GET_USERS, payload: {...data}}
+    return {type: GET_USERS, payload: [...data]}
 }
 
 const getLoginUser = (data) => {

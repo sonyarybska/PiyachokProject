@@ -11,10 +11,10 @@ export function MyReviewsPage() {
     useEffect(() => {
         getReviewsByUserId(user_id).then(data=>setUsersReviews([...data]));
     }, [])
-    console.log(usersReviews);
+
     return (
         <div>
-            {usersReviews.map(value => <OneUserReview value={value}/>)}
+            {usersReviews.map(value => <OneUserReview key={value.review_id} value={value}/>)}
         </div>
     )
 }

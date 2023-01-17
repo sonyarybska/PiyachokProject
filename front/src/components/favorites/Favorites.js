@@ -14,7 +14,7 @@ export function Favorites() {
 
     return (<div>
         {
-            favorite.map(value => <div key={value.favorite_id}>{value.establishment.title}</div>)
+            favorite.map(value => <div key={value.favorite_id}>{value?.establishment?.title}</div>)
         }
     </div>)
 }

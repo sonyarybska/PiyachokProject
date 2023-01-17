@@ -1,0 +1,9 @@
+.user-item{
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+    background-color: white;
+    padding: 20px;
+    width: 160px;
+    height: 200px;
+}
