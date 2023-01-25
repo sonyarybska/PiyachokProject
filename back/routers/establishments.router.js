@@ -1,16 +1,34 @@
 const router = require('express').Router();
 
-const {getEstablishments, createEstablishments, deleteEstablishment, getOneEstablishments, getTypeEstablishments, updateEstablishment} = require("../controllers/establishments.controller");
-const {isBodyValid} = require("../middlewares/establishments. middleware");
+const {
+    getEstablishments,
+    createEstablishments,
+    deleteEstablishment,
+    getOneEstablishments,
+    getTypeEstablishments,
+    putEstablishment,
+    patchEstablishments,
+    getEstablishmentsByUserId,
+    getEstablishmentsByTypeAndUserId
+} = require("../controllers/establishments.controller");
+
+const {isBodyValid, checkFiles} = require("../middlewares/establishments.middleware");
+
 const {checkAccessToken} = require("../middlewares/auth.middleware");
 
-router.get('/',getEstablishments);
-router.post('/', createEstablishments);
+const {createEstablishmentValidator, updateEstablishmentValidator} = require("../validators/establishmets.validator");
+
+router.get('/', getEstablishments);
+router.post('/', checkAccessToken, isBodyValid(createEstablishmentValidator), checkFiles, createEstablishments);
 
 router.get('/type', getTypeEstablishments);
 
 router.get('/:id', getOneEstablishments);
 router.delete('/:id', deleteEstablishment);
-router.put('/:id', updateEstablishment);
+router.put('/:id', checkAccessToken, isBodyValid(updateEstablishmentValidator), checkFiles, putEstablishment);
+router.patch('/:id', checkAccessToken, patchEstablishments);
+
+router.get('/users/:id', getEstablishmentsByUserId);
+router.get('/users/:id/:type', getEstablishmentsByTypeAndUserId);
 
 module.exports = router;

@@ -11,7 +11,7 @@ import {addToFavorite, changeFavorite} from "../../helpers/favorite.helper";
 
 export function EstablishmentInfo() {
     const {one_establishment} = useSelector(state => state.establishmentReducer);
-    const {user: {user_id}} = useSelector(state => state.userReducer);
+    const {user: {user_id}, isAuth} = useSelector(state => state.userReducer);
 
     const dispatch = useDispatch();
     const {state} = useLocation();
@@ -53,9 +53,14 @@ export function EstablishmentInfo() {
     }
 
     useEffect(() => {
-        changeFavorite(one_establishment, favoriteIcon);
-        setFavorite(false);
-    }, [favorite, one_establishment]);
+        if(isAuth){
+            changeFavorite(one_establishment, favoriteIcon);
+            setFavorite(false);
+        }
+        else {
+            favoriteIcon.current.style='black';
+        }
+    }, [favorite, favoriteIcon, isAuth, one_establishment]);
 
     return (
         <div className={'info-container'}>
@@ -63,12 +68,12 @@ export function EstablishmentInfo() {
                 <h1>{one_establishment.title}</h1>
                 {
                     <div className={'slider'}>
-                        <button onClick={prevImage}>{'<'}</button>
+                        <button disabled={!!state.loginRequest} onClick={prevImage}>{'<'}</button>
 
-                        <div className={'slide'}>
-                            <Link to={`previewSlider?index=${image}`}
-                                  state={{title: one_establishment.title}}>
-                                <div className={'image'} style={{
+                        <div className={`slide`}>
+                            {! state?.loginRequest? <Link to={`previewSlider?index=${image}`}
+                                                          state={{title: one_establishment.title}}>
+                                <div className={`image`} style={{
                                     background: `url(${'http://localhost:4000/' + one_establishment?.photos?.[image]?.replace(/\\/g, '/')}) center center / cover no-repeat`,
                                 }}>
                                     <div className={'swiper-container'}>
@@ -82,17 +87,31 @@ export function EstablishmentInfo() {
                                         }
                                     </div>
                                 </div>
-                            </Link>
-
+                            </Link>:
+                                <div className={`image`} style={{
+                                background: `url(${'http://localhost:4000/' + one_establishment?.photos?.[image]?.replace(/\\/g, '/')}) center center / cover no-repeat`,
+                            }}>
+                                <div className={'swiper-container'}>
+                                    {
+                                        one_establishment?.photos?.map((item, index) => {
+                                            return (
+                                                <div
+                                                    className={index === image ? 'active swiper-pagination' : 'swiper-pagination'}></div>
+                                            )
+                                        })
+                                    }
+                                </div>
+                            </div>
+                            }
 
                             <i onClick={(e) => addToFavoriteList(e)} ref={favoriteIcon} className="fa fa-heart"
                                style={{fontSize: "34", color: 'black'}}></i>
                         </div>
-                        <button onClick={nextImage}>{'>'}</button>
+                        <button disabled={!!state.loginRequest} onClick={nextImage}>{'>'}</button>
                     </div>
                 }
             </div>
-            <div>
+            <div className={'news-box'}>
                 <p>News</p>
                 {one_establishment.user_id === user_id ? <News/> : ''}
             </div>

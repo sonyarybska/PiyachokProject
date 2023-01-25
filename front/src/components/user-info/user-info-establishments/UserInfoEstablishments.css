@@ -1,0 +1,16 @@
+.establishment_item{
+    display: flex;
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+}
+
+.establishment-image{
+    width: 150px;
+    height: 170px;
+}
+
+.establishment-details{
+    width: 450px;
+}

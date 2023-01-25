@@ -16,7 +16,8 @@ module.exports = {
                 sort = null,
                 type = null,
                 filterByRating = null,
-                filterByCheck = null
+                filterByCheck = null,
+                approved = false
             } = query;
 
 
@@ -36,9 +37,18 @@ module.exports = {
 
             let establishments;
 
-            if (title) {
+
+            if (approved) {
+                establishments = await Establishment.findAll({
+                    where: {approved: true}, limit,
+                    offset: (page - 1) * limit
+                });
+            } else if (title) {
                 findObj = {...findObj, title: {[Op.iRegexp]: title,}};
-                establishments = await Establishment.findAll({where: findObj});
+                establishments = await Establishment.findAll({
+                    where: findObj, limit,
+                    offset: (page - 1) * limit
+                });
 
             } else if (filterByRating && !filterByCheck && !sort && !type) {
                 establishments = (await Establishment.findAll({
@@ -229,25 +239,22 @@ module.exports = {
 
             } else if (type && !filterByRating && filterByCheck && sort) {
                 establishments = await Establishment.findAll({
-                    where: {
-                        type, average_check: {[Op.between]: betweenCheck},
-                        include: [{
-                            model: Review, as: 'review', attributes: [],
-                        },],
-                        subQuery: false,
-                        attributes: {
-                            include: [[sequelize.fn('coalesce', sequelize.fn('AVG', sequelize.col('review.rating')), 1), 'avgRating']],
-                            exclude: []
-                        },
-                        group: [sequelize.col('establishment.establishment_id')],
-                        order: [sort.split('-')],
-                        limit,
-                        offset: (page - 1) * limit
-                    }
+                    where: {type, average_check: {[Op.between]: betweenCheck}},
+                    include: [{
+                        model: Review, as: 'review', attributes: [],
+                    },],
+                    subQuery: false,
+                    attributes: {
+                        include: [[sequelize.fn('coalesce', sequelize.fn('AVG', sequelize.col('review.rating')), 1), 'avgRating']],
+                        exclude: []
+                    },
+                    group: [sequelize.col('establishment.establishment_id')],
+                    order: [sort.split('-')],
+                    limit,
+                    offset: (page - 1) * limit
                 })
 
             } else if (type && filterByRating && !filterByCheck && sort) {
-                console.log('jhh')
                 establishments = await Establishment.findAll({
                     where: {type},
                     include: [{
@@ -267,7 +274,7 @@ module.exports = {
 
             } else if (type && filterByRating && filterByCheck && sort) {
                 establishments = await Establishment.findAll({
-                    where: {type},
+                    where: {type, approved:true},
                     include: [{
                         model: Review, as: 'review', attributes: [],
                     },],
@@ -284,10 +291,11 @@ module.exports = {
                 })
 
             } else if (type && type.length && !sort && !filterByRating && !filterByCheck) {
-                console.log('ksks');
+
                 establishments = await Establishment.findAll({where: {type}, limit, offset: (page - 1) * limit});
             } else {
-                establishments = (await Establishment.findAll({limit, offset: (page - 1) * limit}));
+
+                establishments = await Establishment.findAll({limit, offset: (page - 1) * limit});
             }
 
             const count = await Establishment.count();
@@ -301,5 +309,57 @@ module.exports = {
             throw new ApiError(e.message, 400);
         }
 
+    },
+
+    findByUserId: async (query, id) => {
+        try {
+            const Establishment = db.getModel('Establishment');
+
+            const {
+                limit = 12,
+                page = 1,
+                approved = false,
+                rejected = false,
+                pending = false
+            } = query;
+
+            let establishments;
+            let count;
+
+            console.log(query);
+
+            if (approved) {
+                establishments = await Establishment.findAll({
+                    where: {approved: true, user_id: id}, limit,
+                    offset: (page - 1) * limit
+                })
+                count = await Establishment.count({where: {user_id: id, approved: true}});
+            } else if (rejected) {
+                establishments = await Establishment.findAll({
+                    where: {rejected: true, user_id: id}, limit,
+                    offset: (page - 1) * limit
+                })
+                count = await Establishment.count({where: {user_id: id, rejected: true}});
+            } else if (pending) {
+                establishments = await Establishment.findAll({
+                    where: {pending: true, user_id: id}, limit,
+                    offset: (page - 1) * limit
+                })
+                count = await Establishment.count({where: {user_id: id, pending: true}});
+            } else {
+                establishments = (await Establishment.findAll({
+                    where: {user_id: id},
+                    limit,
+                    offset: (page - 1) * limit
+                }));
+                count = await Establishment.count({where: {user_id: id}});
+            }
+
+            return {
+                establishments, count
+            }
+        } catch (e) {
+            throw new ApiError(e.message, 400);
+        }
     }
 }

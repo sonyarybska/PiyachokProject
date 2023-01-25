@@ -1,0 +1,43 @@
+.user-info-box {
+    width: 100%;
+    padding: 20px;
+
+}
+
+.user-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px;
+    background-color: white;
+}
+
+.user-name-avatar-box {
+    display: flex;
+    align-items: center;
+    column-gap: 20px;
+}
+
+.user-avatar img {
+    border-radius: 50%;
+}
+
+.user-establishment-box {
+    display: flex;
+    column-gap: 80px;
+    margin-top: 50px;
+}
+
+.user-establishments {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 50px;
+}
+
+.select-sort {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    margin: 10px;
+}

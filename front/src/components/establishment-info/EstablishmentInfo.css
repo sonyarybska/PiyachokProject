@@ -1,6 +1,10 @@
 .info-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: 50px;
     width: 100%;
-    padding: 30px;
+    padding: 70px;
+    box-sizing: border-box;
 }
 
 .slider {
@@ -53,6 +57,10 @@
 .active {
     border: 3px solid white;
 }
+
+.news-box{
+    background-color: white;
+ }
 
 
 

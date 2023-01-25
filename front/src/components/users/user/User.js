@@ -1,11 +1,15 @@
 import './User.css';
 
-export function User({item}){
+import {Link} from "react-router-dom";
 
-    return(
+export function User({item}) {
+
+    return (
         <div className={'user-item'}>
-            <img src={item.picture} alt=""/>
-            {item.name}
+            <Link to={`${item.user_id}`} state={{user_id:item.user_id}}>
+                <img src={item.picture} alt=""/>
+                {item.name}
+            </Link>
         </div>
     )
 }

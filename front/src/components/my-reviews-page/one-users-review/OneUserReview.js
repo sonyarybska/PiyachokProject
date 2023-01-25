@@ -1,7 +1,7 @@
 import './OneUserReview.css';
+import ReactStars from "react-stars";
 
 export function OneUserReview({value}) {
-    console.log(value?.establishment?.avatar);
     return (
         <div className={'review-item'}>
             <div className={'establishment-item-review'}>
@@ -12,8 +12,10 @@ export function OneUserReview({value}) {
                 <p>{value?.establishment?.title}</p>
             </div>
             <div className={'review-text'}>{
-                <p>{value?.text}</p>
-
+                <div>
+                    <p>{value?.text}</p>
+                    <ReactStars edit={false} count={5} value={value?.rating}/>
+                </div>
             }</div>
         </div>
     )

@@ -1,5 +1,6 @@
-import axiosInstance from "./axios.service";
+
 import {setReviews} from "../redux/actions/actions";
+import {axiosInstance} from "./axios.service";
 
 
 const fetchNews = (id) => {

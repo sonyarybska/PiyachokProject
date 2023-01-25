@@ -1,8 +1,12 @@
-.establishment-box{
+
+.establishment-box {
     display: flex;
     gap: 30px;
-    flex-wrap:wrap;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     padding: 30px;
+}
+.disable_filter{
+    pointer-events: none;
 }

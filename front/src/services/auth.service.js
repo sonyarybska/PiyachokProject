@@ -1,7 +1,7 @@
-import axiosInstance from "./axios.service";
-import {getLoginUser,  setAuth} from "../redux/actions/actions";
-import jwt_decode from "jwt-decode";
 
+import {getLoginUser, setAuth, setUserName} from "../redux/actions/actions";
+import jwt_decode from "jwt-decode";
+import {axiosInstance} from "./axios.service";
 
 const login = (tokenId) => {
     return async (dispatch) => {
@@ -13,21 +13,26 @@ const login = (tokenId) => {
 
         dispatch(getLoginUser(response.data.user));
 
+        dispatch(setUserName(response.data.user.name))
+
         return response.data
     }
 };
 
 
-const logout = () => {
+const logout = (navigate) => {
     try {
         return async (dispatch) => {
+
             localStorage.setItem('button', 'false');
 
             localStorage.removeItem('access_token');
 
-            dispatch(getLoginUser({}))
+            navigate('/');
 
-            return axiosInstance.post('/auth/logout', {withCredentials: true});
+            dispatch(getLoginUser({}));
+
+            return  await axiosInstance.post('/auth/logout', {withCredentials: true});
         }
     } catch (e) {
         console.log(e);
@@ -35,22 +40,27 @@ const logout = () => {
 };
 
 
-const checkAuth =  () => {
+const checkAuth = () => {
     try {
         return async (dispatch) => {
             const response = await axiosInstance.get('auth/refresh', {withCredentials: true});
+
             localStorage.setItem('access_token', response.data.tokens.access_token);
+
             dispatch(setAuth(true));
+
             dispatch(getLoginUser(response.data.user));
+
+            return response;
         }
     } catch (e) {
         console.log(e);
     }
 };
 
-const decode =() =>{
+const decode = () => {
     const token = localStorage.getItem('access_token');
-    return  jwt_decode(token);
+    return jwt_decode(token);
 }
 
 export {checkAuth, login, logout, decode};

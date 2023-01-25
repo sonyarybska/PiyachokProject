@@ -1,27 +1,15 @@
-import {useEffect} from "react";
-import {getUsersEstablishments} from "../../services/user.service";
-import {decode} from "../../services/auth.service";
 import './UsersEstablishments.css';
 import {
     Route,
     Routes,
     NavLink
 } from "react-router-dom";
+import {Approved} from "./approved/Approved";
+import {Rejected} from "./rejected/Rejected";
+import {Pending} from "./pending/Pending";
 
-
-import {useDispatch, useSelector} from "react-redux";
-import {setUsersEstablishments} from "../../redux/actions/actions";
-import {StateEstablishments} from "./state-establishments/StateEstablishments";
 
 export function UsersEstablishments() {
-    const {establishments} = useSelector(state => state.establishmentReducer);
-    const dispatch = useDispatch();
-    const {user_id} = decode();
-
-    useEffect(() => {
-        getUsersEstablishments(user_id).then(items => dispatch(setUsersEstablishments([...items.data.data])))
-    }, [establishments]);
-
 
     return (
         <div className={'adv'}>
@@ -41,9 +29,12 @@ export function UsersEstablishments() {
 
             <div>
                 <Routes>
-                    <Route path={"/*"} element={<StateEstablishments state={"approved"}/>}/>
-                    <Route path={"/rejected"} element={<StateEstablishments state={"rejected"}/>}/>
-                    <Route path={"/pending"} element={<StateEstablishments state={"pending"}/>}/>
+                    <Route path={"/*"}
+                           element={<Approved/>}/>
+                    <Route path={"/rejected"}
+                           element={<Rejected/>}/>
+                    <Route path={"/pending"}
+                           element={<Pending/>}/>
                 </Routes>
             </div>
 

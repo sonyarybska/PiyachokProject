@@ -6,10 +6,8 @@ require('dotenv').config();
 
 const cookieParser = require("cookie-parser");
 
-
 const connection = require("./PgSql");
-const {PORT,ALLOWED_ORIGIN}=require('./constants/config');
-
+const {PORT, ALLOWED_ORIGIN} = require('./constants/config');
 
 connection.getInstance().setModels();
 
@@ -20,10 +18,11 @@ const userRouter = require('./routers/user.router');
 const authRouter = require('./routers/auth.router');
 const reviewRouter = require('./routers/review.router');
 const newsRouter = require('./routers/news.router');
+const favoriteRouter = require('./routers/favorite.router');
 
 app.use(cookieParser());
-app.use(cors({origin: ALLOWED_ORIGIN, credentials:true}));
-app.options('*', cors({origin: ALLOWED_ORIGIN, credentials:true}));
+app.use(cors({origin: ALLOWED_ORIGIN, credentials: true}));
+app.options('*', cors({origin: ALLOWED_ORIGIN, credentials: true}));
 
 app.use(express.json());
 app.use(express.urlencoded({
@@ -39,18 +38,16 @@ app.use('/users', userRouter);
 app.use('/auth', authRouter);
 app.use('/reviews', reviewRouter);
 app.use('/news', newsRouter);
+app.use('/favorite', favoriteRouter);
 
-// eslint-disable-next-line no-unused-vars
+
 app.use('*', (err, req, res, next) => {
-    console.log(err)
     res
         .status(err.status || 'GENERIC_ERROR')
         .json({message: err.message});
 });
 
-
-
-app.listen(PORT,async ()=>{
+app.listen(PORT, async () => {
     try {
         console.log(`app listen ${PORT}`)
     } catch (error) {

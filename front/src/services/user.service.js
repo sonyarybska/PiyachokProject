@@ -1,5 +1,6 @@
-import axiosInstance from "./axios.service";
+
 import {getUsers} from "../redux/actions/actions";
+import {axiosInstance} from "./axios.service";
 
 
 const fetchUsers = () => {
@@ -10,40 +11,27 @@ const fetchUsers = () => {
     }
 };
 
-const getUsersEstablishments = async (id) => {
-    const response = await axiosInstance.get(`/users/${id}/establishments`);
+const fetchOneUser=async (id)=>{
+    const response=await axiosInstance.get(`/users/${id}`);
 
     return response;
 }
 
-const fetchFavorite = async () => {
-    const response = await axiosInstance.get(`/users/favorite`);
-
-    return response.data;
-}
-
-const fetchFavoritesByUserId = async (user_id) => {
-    const response = await axiosInstance.get(`/users/${user_id}/favorite`);
+const deleteUser=async (id)=>{
+    const response=await axiosInstance.delete(`/users/${id}`);
 
     return response;
 }
 
-const addUsersFavorite = async (user_id, establishment_id) => {
-    const response = await axiosInstance.post(`/users/${user_id}/favorite`, {establishment_id});
+const updateUser=async (id,data)=>{
+    const response=await axiosInstance.put(`/users/${id}`,data);
 
     return response;
 }
 
-const deleteFavorite = async (user_id, establishment_id) => {
-    const response = await axiosInstance.delete(`/users/${user_id}/favorite/${establishment_id}`);
-
-    return response;
-}
-
-const getReviewsByUserId = async (id) => {
-    const response = await axiosInstance.get(`/users/${id}/reviews`);
-
-    return response.data;
-}
-
-export {fetchUsers, getUsersEstablishments, getReviewsByUserId, fetchFavorite, addUsersFavorite, deleteFavorite, fetchFavoritesByUserId};
+export {
+    fetchUsers,
+    fetchOneUser,
+    deleteUser,
+    updateUser
+};

@@ -1,41 +1,47 @@
 const sequelize = require("sequelize");
+const {reviewsRepository} = require("../repository/index");
 const db = require('../PgSql').getInstance();
 
 module.exports = {
     getReviewsByEstablishmentId: async (req, res) => {
         try {
-            const {id} = req.params;
-            console.log(id);
-            const model = db.getModel('Review');
+            const Review = db.getModel('Review');
             const User = db.getModel('User');
 
-            const response = await model.findAll({where: {establishment_id: +id}, include: User});
+            const reviews = await Review.findAll({where: {establishment_id: req.params.id}, include: User});
 
-            res.json(response);
+            res.json(reviews);
+        } catch (e) {
+            res.json(e.message);
+        }
+    },
+
+    getReviewsByUserId: async (req, res) => {
+        try {
+            const data = await reviewsRepository.findByUserId(req.query, req.params.id)
+
+            res.json(data);
         } catch (e) {
             res.json(e.message);
         }
     },
 
     postReview: async (req, res) => {
-        const model = db.getModel('Review');
+        const Review = db.getModel('Review');
 
-        const created = await model.create({...req.body});
+        const review = await Review.create({...req.body});
 
-        res.json(created);
+        res.json(review);
     },
 
     getAverageRatingById: async (req, res) => {
-        const model = db.getModel('Review');
-        const {id} = req.params;
+        const Review = db.getModel('Review');
 
-        const avgRatings = await model.findAll({
-            where:
-                {establishment_id: +id},
+        const avgRating = await Review.findAll({
+            where: {establishment_id: req.params.id},
             attributes: [[sequelize.fn('coalesce', sequelize.fn('AVG', sequelize.col('rating')), 1), 'avgRating']]
+        });
 
-        })
-
-        res.json(avgRatings);
+        res.json(avgRating);
     }
 }

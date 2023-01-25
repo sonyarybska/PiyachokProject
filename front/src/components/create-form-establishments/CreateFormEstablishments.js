@@ -2,26 +2,32 @@ import './CreateFormEsrablishments.css';
 import {createRef, useEffect, useState} from "react";
 
 import {
-    fetchEstablishments,
     getTypeEstablishments,
     postEstablishments,
-    updateEstablishments
+    putEstablishments
 } from "../../services/establishment.service";
+
 import {decode} from "../../services/auth.service";
 import {Reorder} from "framer-motion";
 
 import {ReorderPreviewPictures} from "./ReorderPreviewPictures/ReorderPreviewPictures";
 import {usePlacesWidget} from "react-google-autocomplete";
 import {useLocation} from "react-router-dom";
-import {useDispatch} from "react-redux";
 
 
 export function CreateFormEstablishments() {
     const {state, pathname} = useLocation();
-    const dispatch = useDispatch();
     const currentPath = pathname?.split('/').pop();
 
-    const [data, setData] = useState({title: '', type: '', tags: '', start_work: '', end_work: '', phone: '', average_check:''});
+    const [data, setData] = useState({
+        title: '',
+        type: '',
+        tags: '',
+        start_work: '',
+        end_work: '',
+        phone: '',
+        average_check: ''
+    });
 
     const [location, setLocation] = useState('');
     const [files, setFiles] = useState([]);
@@ -33,7 +39,15 @@ export function CreateFormEstablishments() {
     useEffect(() => {
         (async () => {
             if (currentPath === 'update') {
-                setData({...state});
+                setData({
+                    title: state.title,
+                    type: state.type,
+                    tags: state.tags,
+                    start_work: state.start_work,
+                    end_work: state.end_work,
+                    phone: state.phone,
+                    average_check: state.average_check
+                });
                 setLocation(state?.location);
 
                 const urlArray = [];
@@ -55,7 +69,7 @@ export function CreateFormEstablishments() {
                 setFileUrl([...urlArray]);
 
             } else {
-                setData({title: '', type: '', tags: '', start_work: '', end_work: '', phone: ''});
+                setData({title: '', type: '', tags: '', start_work: '', end_work: '', phone: '', average_check: ''});
                 setLocation('');
                 setFiles([]);
                 setFileUrl([]);
@@ -71,7 +85,7 @@ export function CreateFormEstablishments() {
         const reorderedArray = files.sort((a, b) => orderIndex.indexOf(a.index.toString()) - orderIndex.indexOf(b.index.toString()));
         setFiles([...reorderedArray]);
 
-    }, [fileUrl]);
+    },[fileUrl]);
 
     const handleChange = (event) => {
         const fileList = event.target.files;
@@ -98,9 +112,8 @@ export function CreateFormEstablishments() {
         formData.append("data", JSON.stringify(data));
         formData.append("user_id", user_id);
         formData.append("location", location);
-        currentPath === 'update' ? await updateEstablishments(formData, state.establishment_id) : await postEstablishments(formData);
 
-        dispatch(fetchEstablishments());
+        currentPath === 'update' ? await putEstablishments(formData, state.establishment_id) : await postEstablishments(formData);
     }
 
     const onChange = (e) => {
@@ -109,7 +122,9 @@ export function CreateFormEstablishments() {
 
     const {ref} = usePlacesWidget({
         apiKey: 'AIzaSyD5gZah6W1Tr3U5x7KE8P6Zh2I9WElHwak', onPlaceSelected: () => {
-            setLocation(ref?.current?.value);
+            if (ref?.current?.value) {
+                setLocation(ref?.current?.value);
+            }
         }, language: 'en', options: {
             componentRestrictions: {country: "ua"},
             fields: ["address_component", "geometry"],
@@ -146,7 +161,7 @@ export function CreateFormEstablishments() {
                 <input type="time" value={data.start_work} name={'start_work'}
                        placeholder={'start work'}
                        onChange={onChange}/>
-                <input ref={inputFileRef} type="file" id={'input-file'} placeholder={'photo'} accept="image/*"
+                <input ref={inputFileRef} hidden type="file" id={'input-file'} placeholder={'photo'} accept="image/*"
                        onChange={handleChange}
                        onClick={(event) => event.target.value = ''}
                        multiple
@@ -154,7 +169,8 @@ export function CreateFormEstablishments() {
                 <input type="time" value={data.end_work} name={'end_work'}
                        placeholder={'end work'}
                        onChange={onChange}/>
-                <input value={data.average_check} name={'average_check'} placeholder={'average check'} onChange={onChange} type="text"/>
+                <input value={data.average_check} name={'average_check'} placeholder={'average check'}
+                       onChange={onChange} type="number"/>
             </div>
 
             {<div className={'photo-section'}>

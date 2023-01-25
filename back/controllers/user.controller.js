@@ -1,15 +1,16 @@
 const {saveToken} = require("../services/auth.service");
 const {generateTokens} = require("../services/auth.service");
+const {deleteEstablishmentPhotosByUserId} = require("../helpers/fileUploader.helper");
 const db = require('../PgSql').getInstance();
 
 module.exports = {
     getUsers: async (req, res) => {
         try {
-            const model = db.getModel('User');
+            const User = db.getModel('User');
 
-            const items = await model.findAll({});
+            const users = await User.findAll({});
 
-            res.json(items);
+            res.json(users);
         } catch (e) {
             res.json(e.message)
         }
@@ -17,22 +18,14 @@ module.exports = {
 
     getOneUser: async (req, res) => {
         try {
-            const model = db.getModel('User');
-            console.log(req.params);
-            const item = await model.findAll({where: {user_id: req.params.id}});
+            const User = db.getModel('User');
 
-            res.json(item);
+            const user = await User.findOne({where: {user_id: req.params.id}});
+
+            res.json(user);
         } catch (e) {
             res.json(e.message);
         }
-    },
-
-    getUsersEstablishments: async (req, res) => {
-        const model = db.getModel('Establishment');
-
-        const items = await model.findAll({where: {user_id: req.params.id}, raw: true});
-
-        res.json({data: items});
     },
 
     createUser: async (req, res) => {
@@ -49,7 +42,6 @@ module.exports = {
 
             await saveToken(user_id, tokens.refresh_token);
 
-
             res.cookie('refreshToken', tokens.refresh_token, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
 
             res.json({user: user.dataValues, tokens});
@@ -62,12 +54,20 @@ module.exports = {
         try {
             const User = db.getModel('User');
             const Token = db.getModel('Token');
+            const Review = db.getModel('Review');
+            const Establishment = db.getModel('Establishment');
 
             await User.destroy({where: {user_id: req.params.id}});
 
             await Token.destroy({where: {user_id: req.params.id}});
 
-            res.json('Deleted')
+            await Review.destroy({where: {user_id: req.params.id}});
+
+            await Establishment.destroy({where: {user_id: req.params.id}});
+
+            await deleteEstablishmentPhotosByUserId(req.params.id);
+
+            res.json('Deleted');
         } catch (e) {
             res.json(e.message)
         }
@@ -75,89 +75,11 @@ module.exports = {
 
     updateUser: async (req, res) => {
         try {
-            const model = db.getModel('User');
+            const User = db.getModel('User');
 
-            await model.update({...req.body}, {where: {user_id: req.params.id}});
+           const user = await User.update({...req.body}, {where: {user_id: req.params.id},  returning: true, plain: true});
 
-            res.json('Updated');
-        } catch (e) {
-            res.json(e.message);
-        }
-    },
-
-    getReviewsByUserId: async (req, res) => {
-        try {
-            const Review = db.getModel('Review');
-
-            const Establishment = db.getModel('Establishment');
-
-            const {id} = req.params;
-
-            const data = await Review.findAll({
-                where: {user_id: id},
-                include: [{model: Establishment, as: 'establishment'}]
-            });
-            console.log(data);
-            res.json(data);
-        } catch (e) {
-            res.json(e.message);
-        }
-    },
-
-    getFavorite: async (req, res) => {
-        try {
-            const model = db.getModel('Favorite');
-
-            const favorite = await model.findAll({});
-
-            res.json(favorite);
-        } catch (e) {
-            res.json(e.message)
-        }
-    },
-
-    addFavorite: async (req, res) => {
-        try {
-            const model = db.getModel('Favorite');
-
-            const {establishment_id} = req.body;
-
-            const {id} = req.params;
-
-            await model.create({user_id: id, establishment_id}, {returning: true, plain: true});
-
-            res.json('ok');
-        } catch (e) {
-            res.json(e.message);
-        }
-    },
-
-    getFavoriteByUserId: async (req, res) => {
-        try {
-            const Favorite = db.getModel('Favorite');
-            const Establishment = db.getModel('Establishment');
-
-            const {id} = req.params;
-
-            const userFavorite = await Favorite.findAll({where: {user_id: id}, include:Establishment});
-
-            console.log(userFavorite);
-
-            res.json(userFavorite);
-        } catch (e) {
-            res.json(e.message)
-        }
-    },
-
-    deleteFavorite: async (req, res) => {
-        try {
-            const {id, est_id} = req.params;
-
-            const model = db.getModel('Favorite');
-
-            await model.destroy({where: {user_id: id, establishment_id: est_id}});
-
-            res.json('deleted');
+            res.json(user[1]);
         } catch (e) {
             res.json(e.message);
         }

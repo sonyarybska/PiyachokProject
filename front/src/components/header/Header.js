@@ -1,24 +1,27 @@
 import './Header.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {useDispatch, useSelector} from "react-redux";
-import {Link} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 
 import {setAuth} from "../../redux/actions/actions";
 import {login, logout} from "../../services/auth.service";
 import {UserMenu} from "../user-menu/UserMenu";
-import {fetchEstablishments} from "../../services/establishment.service";
-
 
 export function Header() {
     const {isAuth, user} = useSelector(state => state.userReducer);
+
+    const {state} = useLocation()
+
     const [search_title, setSearch_title] = useState(false);
+
+    const navigate = useNavigate();
 
     const dispatch = useDispatch();
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        dispatch(fetchEstablishments(search_title));
+        navigate('/', {state: {title: search_title}});
     }
 
     const onChange = (e) => {
@@ -38,8 +41,7 @@ export function Header() {
 
     const logoutResponse = async () => {
         google.accounts.id.disableAutoSelect();
-        await dispatch(logout());
-        return true;
+        await dispatch(logout(navigate));
     }
 
     const divRef = useRef(null);
@@ -53,7 +55,7 @@ export function Header() {
             })
             google.accounts.id.renderButton(
                 divRef.current,
-                {theme: 'outline', size: 'large'}
+                {theme: 'outline', size: 'large', type: "icon"}
             )
         }
 
@@ -62,7 +64,7 @@ export function Header() {
     return (
         <div className={'header'}>
             <div className={'container'}>
-                <Link to={'/'}>
+                <Link className={state?.loginRequest?'disable_actions':''} to={'/'}>
                     <div className={'logo_title'}>
                         <div className={'title'}>Piyachok</div>
                         <img className={'logo'} src='/wine.png' alt=""/>
@@ -71,12 +73,12 @@ export function Header() {
 
 
                 <form className={"find_form"} onSubmit={onSubmit}>
-                    <input onChange={onChange} type="text" placeholder="Искать здесь..."/>
+                    <input className={state?.loginRequest?'disable_actions':''} onChange={onChange} type="text" placeholder="Искать здесь..."/>
                 </form>
 
-                {!isAuth && <div ref={divRef}></div>}
+                {!isAuth && <div className={state?.loginRequest?'disable_actions':''} ref={divRef}></div>}
 
-                {isAuth && <UserMenu user={user}  logoutResponse={logoutResponse}/>}
+                {isAuth && <UserMenu user={user} logoutResponse={logoutResponse}/>}
 
             </div>
         </div>

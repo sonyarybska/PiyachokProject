@@ -1,15 +1,14 @@
 const {saveToken} = require("../services/auth.service");
 const {generateTokens} = require("../services/auth.service");
-const {ApiError} = require("../errors/ApiError");
 const db = require('../PgSql').getInstance();
 
 
 module.exports = {
     login: async (req, res) => {
         try {
-            const model = db.getModel('User');
+            const User = db.getModel('User');
 
-            const user = await model.findOne({where: {email: req.app.get('email')}});
+            const user = await User.findOne({where: {email: req.app.get('email')}});
 
             const {user_id, email} = user.dataValues
 
@@ -58,7 +57,7 @@ module.exports = {
 
             return res.json({tokens, user: req.user});
         } catch (e) {
-            throw new ApiError(e.message, 400);
+            res.json(e.message);
         }
     }
 }

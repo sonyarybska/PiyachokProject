@@ -26,7 +26,7 @@ module.exports = (client) => {
         }
     );
 
-    Establishment.hasOne(Favorite, {foreignKey: 'establishment_id'});
+    Establishment.hasOne(Favorite, {foreignKey: 'establishment_id', as:'establishment'});
     Favorite.belongsTo(Establishment, {foreignKey: 'establishment_id'});
 
     return Favorite;

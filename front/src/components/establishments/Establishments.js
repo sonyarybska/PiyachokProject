@@ -3,9 +3,11 @@ import './Establishments.css';
 import {Establishment} from "./establishment/Establishment";
 import {useEffect, useState} from "react";
 import {fetchEstablishments, getTypeEstablishments} from "../../services/establishment.service";
+import {useLocation} from "react-router-dom";
+import {AuthRequest} from "../auth-request/AuthRequest";
 
 
-export function Establishments() {
+export function Establishments({admin}) {
     const [establishments, setEstablishments] = useState([]);
 
     const [types, setTypes] = useState([]);
@@ -20,9 +22,13 @@ export function Establishments() {
     const [filterByRating, setFilterByRating] = useState(null);
     const [filterByCheck, setFilterByCheck] = useState(null);
 
+    const [fetchingEstablishments, setFetchingEstablishments] = useState(true);
+
+    const {state} = useLocation();
+
     useEffect(() => {
         if (fetching) {
-            fetchEstablishments(currenPage, null, null, sortType, currentType, filterByRating, filterByCheck).then(value => {
+            fetchEstablishments(currenPage, 8, state?.title, sortType, currentType, filterByRating, filterByCheck,true).then(value => {
                 setEstablishments([...establishments, ...value.data.establishments]);
                 setTotalCount(value?.data?.count);
                 setMaxCheck(value.data.maxCheck);
@@ -30,15 +36,19 @@ export function Establishments() {
                 .finally(() => setFetching(false));
             setCurrentPage(prevState => +prevState + 1);
         }
-
     }, [fetching]);
 
+
     useEffect(() => {
-        document.addEventListener('scroll', scrollHandler);
-        return function () {
-            document.removeEventListener('scroll', scrollHandler);
+        if (state?.title){
+            if (state?.length) {
+                fetchEstablishments(null, 6, state?.title).then(value => setEstablishments([...value.data.establishments]));
+            } else if (!state?.length) {
+                console.log(state)
+                fetchEstablishments().then(value => setEstablishments([...value.data.establishments])).finally(() => setFetchingEstablishments(false));
+            }
         }
-    }, [totalCount]);
+    }, [state, fetchingEstablishments]);
 
     const scrollHandler = (e) => {
         if (e?.target?.documentElement?.scrollHeight - (e?.target?.documentElement?.scrollTop + window?.innerHeight) < 100 && establishments?.length < totalCount) {
@@ -47,63 +57,66 @@ export function Establishments() {
     }
 
     useEffect(() => {
+        document.addEventListener('scroll', scrollHandler);
+        return function () {
+            document.removeEventListener('scroll', scrollHandler);
+        }
+    }, [totalCount]);
+
+
+
+    useEffect(() => {
         getTypeEstablishments().then(value => setTypes([...value.data]));
     }, []);
 
 
     const onChangeType = (e) => {
+        setCurrentPage(2);
         if (e.target.value.length) {
             setCurrentType(e.target.value);
-            setCurrentPage(prevState => +prevState + 1);
-            fetchEstablishments(null, 15, null, sortType, e.target.value, filterByRating).then(value => setEstablishments([...value.data.establishments]));
+            fetchEstablishments(null, 8, state?.title, sortType, e.target.value, filterByRating, null).then(value => setEstablishments([...value.data.establishments]));
 
         } else {
             setCurrentType(null);
-            setCurrentPage(2);
-            fetchEstablishments(null, null, null, sortType, null, filterByRating).then(value => setEstablishments([...value.data.establishments]));
+            fetchEstablishments(null, 8, state?.title, sortType, null, filterByRating, null).then(value => setEstablishments([...value.data.establishments]));
         }
     }
 
     const onChangeSort = (e) => {
+        setCurrentPage(2);
         if (e.target.value.length) {
-            fetchEstablishments(null, 15, null, e.target.value, currentType, filterByRating).then(value => setEstablishments([...value?.data?.establishments]));
-            setSortType(e.target.value);
-            setCurrentPage(prevState => +prevState + 1);
-
+            fetchEstablishments(null, 8, state?.title, e.target.value, currentType, filterByRating).then(value => setEstablishments([...value?.data?.establishments]));
         } else {
-            fetchEstablishments(null, null, null, null, currentType, filterByRating).then(value => setEstablishments([...value?.data?.establishments]));
+            fetchEstablishments(null, 8, state?.title, null, currentType, filterByRating, null, null, null, true).then(value => setEstablishments([...value?.data?.establishments]));
             setSortType(null);
-            setCurrentPage(2);
         }
     }
 
     const onSubmitFilterRating = (e) => {
         e.preventDefault();
         let filterParams;
-
+        setCurrentPage(2);
         if (+e.target[0].value === 0 && +e.target[1].value === 0) {
-            fetchEstablishments(1, null, null, sortType, currentType, null, filterByCheck).then(value => {
+            fetchEstablishments(null, 8, state?.title, sortType, currentType, null, filterByCheck).then(value => {
                 setEstablishments([...value.data.establishments])
             });
 
             setFilterByRating(null);
-            setCurrentPage(2);
         } else if (+e.target[1].value === 0 && !+e.target[0].value) {
             filterParams = `rating-${+e.target[0].value},${5}`;
-            fetchEstablishments(1, null, null, sortType, currentType, filterParams, filterByCheck).then(value => {
+            fetchEstablishments(null, 8, state?.title, sortType, currentType, filterParams, filterByCheck).then(value => {
                 setEstablishments([...value.data.establishments])
             });
 
             setFilterByRating(filterParams);
-            setCurrentPage(prevState => +prevState + 1);
+
         } else {
             filterParams = `rating-${+e.target[0].value},${+e.target[1].value}`;
-            fetchEstablishments(1, null, null, sortType, currentType, filterParams, filterByCheck).then(value => {
+            fetchEstablishments(null, 8, state?.title, sortType, currentType, filterParams, filterByCheck).then(value => {
                 setEstablishments([...value.data.establishments])
             });
 
             setFilterByRating(filterParams);
-            setCurrentPage(prevState => +prevState + 1);
         }
     }
 
@@ -112,38 +125,38 @@ export function Establishments() {
 
         let filterParams;
 
+        setCurrentPage(2);
+
         if (+e.target[0].value === 0 && +e.target[1].value === 0) {
             filterParams = `averageCheck-${0},${maxCheck}`;
-            fetchEstablishments(1, null, null, sortType, currentType, filterByRating, null).then(value => {
+            fetchEstablishments(null, 8, state?.title, sortType, currentType, filterByRating, null).then(value => {
                 setEstablishments([...value.data.establishments])
             });
 
             setFilterByCheck(filterParams);
-            setCurrentPage(2);
         } else if (+e.target[1].value === 0 && !+e.target[0].value) {
             filterParams = `averageCheck-${+e.target[0].value},${maxCheck}`;
-            fetchEstablishments(1, null, null, sortType, currentType, filterByRating, filterParams).then(value => {
+            fetchEstablishments(null, 8, state?.title, sortType, currentType, filterByRating, filterParams).then(value => {
                 setEstablishments([...value.data.establishments])
             });
 
             setFilterByCheck(filterParams);
-            setCurrentPage(prevState => +prevState + 1);
         } else {
             filterParams = `averageCheck-${+e.target[0].value},${+e.target[1].value}`;
-            fetchEstablishments(1, null, null, sortType, currentType, filterByRating, filterParams).then(value => {
+            fetchEstablishments(null, 8, state?.title, sortType, currentType, filterByRating, filterParams).then(value => {
                 setEstablishments([...value.data.establishments])
             });
 
             setFilterByCheck(filterParams);
-            setCurrentPage(prevState => +prevState + 1);
         }
     }
 
-    return (<div>
-        <div className={'filter-box'}>
+
+    return (<div className={'main-page'}>
+        {!admin && <div className={'filter-box'}>
             <div className={'filter-item'}>
                 <p>Sort by</p>
-                <select onChange={onChangeSort}>
+                <select className={state?.loginRequest ? 'disable_filter' : ''} onChange={onChangeSort}>
                     <option value={''}>Without sort</option>
                     <option value="average_check-DESC">Sort by average check (descending)</option>
                     <option value="average_check-ASC">Sort by average check (ascending)</option>
@@ -158,7 +171,7 @@ export function Establishments() {
 
             <div className={'filter-item'}>
                 <p>Type of establishment</p>
-                <select onChange={onChangeType} name="" id="">
+                <select className={state?.loginRequest ? 'disable_filter' : ''} onChange={onChangeType} name="" id="">
                     <option value={''}>Any type</option>
                     {types.map((value, index) => <option key={index} value={value.title}>{value.title}</option>)}
                 </select>
@@ -167,8 +180,8 @@ export function Establishments() {
             <div className={'filter-item'}>
                 <p>Rating</p>
                 <form className={'between-form'} onSubmit={onSubmitFilterRating} name={'rating'} action="">
-                    <input type="number"/>
-                    <input type="number"/>
+                    <input className={state?.loginRequest ? 'disable_filter' : ''} type="number"/>
+                    <input className={state?.loginRequest ? 'disable_filter' : ''} type="number"/>
                     <button> filter</button>
                 </form>
             </div>
@@ -176,18 +189,32 @@ export function Establishments() {
             <div className={'filter-item'}>
                 <p>Average check</p>
                 <form className={'between-form'} onSubmit={onSubmitFilterCheck} name={'average_check'} action="">
-                    <input type="number"/>
-                    <input type="number"/>
+                    <input className={state?.loginRequest ? 'disable_filter' : ''} type="number"/>
+                    <input className={state?.loginRequest ? 'disable_filter' : ''} type="number"/>
                     <button>filter</button>
                 </form>
             </div>
         </div>
+        }
+
 
         <div className={'establishment-box'}>
-            {establishments.length ? establishments?.map((value, index) => <Establishment
-                sortFunction={onChangeSort} key={index}
-                item={value}/>) : <div>No result</div>}
-        </div>
 
+
+            {establishments.length ? establishments?.map((value, index) => {
+                if(value.approved){
+                  return <Establishment
+                        loginRequest={state?.loginRequest}
+                        sortFunction={onChangeSort}
+                        key={index}
+                        item={value}/>
+                }
+                return null;
+                }) :
+                <div>No result</div>}
+        </div>
+        {
+            state?.loginRequest && <AuthRequest/>
+        }
     </div>)
 }

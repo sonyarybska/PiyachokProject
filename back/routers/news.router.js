@@ -6,6 +6,6 @@ router.get('/', getNews);
 router.post('/', createNews);
 
 router.post('/:id', getNewsByEstablishmentId);
-router.get('/types', getNewsTypes);
+router.get('/:types', getNewsTypes);
 
 module.exports = router;

@@ -1,7 +1,19 @@
-import axiosInstance from "./axios.service";
+import {axiosInstance} from "./axios.service";
 
-const fetchEstablishments = async (page, limit, title, sort, type, filterByRating,filterByCheck) => {
-    const response = await axiosInstance.get(`/establishments`, {params: {page, limit, title, sort, type, filterByRating,filterByCheck}});
+
+const fetchEstablishments = async (page, limit, title, sort, type, filterByRating, filterByCheck, approved) => {
+    const response = await axiosInstance.get(`/establishments`, {
+        params: {
+            page,
+            limit,
+            title,
+            sort,
+            type,
+            filterByRating,
+            filterByCheck,
+            approved
+        }
+    });
 
     return response;
 }
@@ -12,21 +24,21 @@ const fetchOneEstablishment = async (id) => {
 }
 
 const postEstablishments = async (data) => {
-    const response = await axiosInstance.post('/establishments', data);
-
-    return response;
+    const response = (await axiosInstance.post('/establishments', data).catch(err => err.response));
+    console.log(response);
+    return response.data.message ? alert(response.data.message) : response;
 };
 
-const getFilesEstablishments = async (id, user_id) => {
-    const response = await axiosInstance.get(`/establishments/files/${id}/${user_id}`);
+const putEstablishments = async (data, id) => {
+    const response = await axiosInstance.put(`/establishments/${id}`, data).catch(err => err.response);
+
+    return response.data.message ? alert(response.data.message) : response;
+};
+
+const patchEstablishments = async (data, id) => {
+    const response = await axiosInstance.patch(`/establishments/${id}`, data).catch(err => err.response);
 
     return response;
-}
-
-const updateEstablishments = async (data, id) => {
-    const result = await axiosInstance.put(`/establishments/${id}`, data);
-
-    return result.data;
 };
 
 const deleteEstablishment = async (id) => {
@@ -39,13 +51,34 @@ const getTypeEstablishments = async () => {
     return response;
 }
 
+const getEstablishmentsByUserId = async (id, page, limit, approved, rejected, pending) => {
+    const response = await axiosInstance.get(`/establishments/users/${id}`, {
+        params: {
+            page,
+            limit,
+            approved,
+            rejected,
+            pending
+        }
+    });
+
+    return response;
+}
+
+const getEstablishmentsByUserIdAndByType = async (id, type) => {
+    const response = await axiosInstance.get(`/establishments/users/${id}/${type}`);
+
+    return response.data;
+}
 
 export {
     fetchEstablishments,
     postEstablishments,
-    updateEstablishments,
+    putEstablishments,
+    patchEstablishments,
     getTypeEstablishments,
     fetchOneEstablishment,
     deleteEstablishment,
-    getFilesEstablishments
+    getEstablishmentsByUserId,
+    getEstablishmentsByUserIdAndByType
 };

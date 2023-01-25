@@ -1,5 +1,5 @@
 import './App.css';
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
 import {Header} from "./components/header/Header";
 import {Establishments} from "./components/establishments/Establishments";
@@ -17,7 +17,8 @@ import {ConfirmationPage} from "./components/confirmation-page/ConfirmationPage"
 import {MyReviewsPage} from "./components/my-reviews-page/MyReviewsPage";
 import {Favorites} from "./components/favorites/Favorites";
 import {AdminMenu} from "./components/admin-menu/AdminMenu";
-
+import {AuthRequest} from "./components/auth-request/AuthRequest";
+import {ResponseInterceptor} from "./components/response-interceptor/ResponseInterceptor";
 
 function App() {
     const dispatch = useDispatch();
@@ -33,6 +34,7 @@ function App() {
 
     return (<Router>
         {age ? <div className="App">
+            <ResponseInterceptor/>
             <Routes>
                 <Route path={'/adv/:title/previewSlider'} element={<PreviewSlider/>}/>
                 <Route path={'/*'} element={<Header/>}/>
@@ -46,6 +48,7 @@ function App() {
                 <Route path={'/my-reviews'} element={<MyReviewsPage/>}/>
                 <Route path={'/adv/:title/previewSlider'} element={''}/>
                 <Route path={'/adv/:title/*'} element={<EstablishmentInfo/>}/>
+                <Route path={'/auth'} element={<AuthRequest/>}/>
             </Routes>
         </div> : <ConfirmationPage setAge={setAge}/>}
     </Router>);

@@ -1,7 +1,8 @@
+const db = require('../PgSql').getInstance();
+
 const authService = require("../services/auth.service");
 const messagesEnum = require("./../errors/message-enum");
 const {statusEnum} = require("./../errors/index");
-const db = require('../PgSql').getInstance();
 const {ApiError} = require("./../errors/ApiError");
 
 module.exports = {
@@ -11,7 +12,7 @@ module.exports = {
 
 
             if (!token) {
-                throw new ApiError('Denied', 401);
+                throw new ApiError('Forbidden', 403);
             }
 
             authService.verifyToken(token);
@@ -28,16 +29,17 @@ module.exports = {
             const User = db.getModel('User');
 
             const {refreshToken} = req.cookies;
-            console.log(refreshToken);
+
             if (!refreshToken) {
                 throw new ApiError(messagesEnum.INVALID_TOKEN, statusEnum.UNAUTHORIZED);
             }
 
             authService.verifyToken(refreshToken, 'refresh');
 
-            const tokenResponse = await Token.findOne({where: {refresh_token: refreshToken}, include: User})
+            const tokenResponse = await Token.findOne({where: {refresh_token: refreshToken}, include: User});
 
-            if (!tokenResponse.dataValues || !tokenResponse.dataValues.user) {
+
+            if (!tokenResponse?.dataValues || !tokenResponse?.dataValues.user) {
                 throw new ApiError(messagesEnum.INVALID_TOKEN, statusEnum.UNAUTHORIZED);
             }
 

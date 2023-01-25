@@ -15,11 +15,11 @@ module.exports = {
         res.json('created');
     },
 
-    getNewsByEstablishmentId: async (req,res)=>{
+    getNewsByEstablishmentId: async (req, res) => {
         res.json('response')
     },
 
-    getNewsTypes: async (req, res)=>{
+    getNewsTypes: async (req, res) => {
         const Type_News = db.getModel('Type_News');
 
         const types = await Type_News.findAll({});

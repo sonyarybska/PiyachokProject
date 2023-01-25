@@ -5,7 +5,7 @@ import {User} from "./user/User";
 import './Users.css';
 
 export function Users() {
-    const {users} = useSelector(state => state.userReducer);
+    const {users,user} = useSelector(state => state.userReducer);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -20,7 +20,7 @@ export function Users() {
     return (
         <div className={'users-container'}>
             {
-                users.map(value => <User item={value}/>)
+               users.filter(value=>value.user_id!==user.user_id).map((value,index) => <User key={index} item={value}/>)
             }
         </div>
     )

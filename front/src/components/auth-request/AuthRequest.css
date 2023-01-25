@@ -1,0 +1,36 @@
+.login-box {
+    border-radius: 20px;
+    background-color: black;
+    top:250px;
+    left: 60vh;
+    text-align: center;
+    vertical-align: middle;
+    position: fixed;
+    width: 600px;
+    height: 360px;
+}
+
+.login-button{
+    position: relative;
+    left: 185px;
+    top:100px;
+    width: 200px;
+    z-index: 2;
+}
+
+.login-box p{
+    position: relative;
+    left: 125px;
+    color: white;
+    font-size: 35px;
+    width: 350px;
+    margin: 0;
+}
+
+.login-box button{
+    position: relative;
+    background-color: white;
+    left: 260px;
+    border-radius: 20px;
+    top:5px;
+}

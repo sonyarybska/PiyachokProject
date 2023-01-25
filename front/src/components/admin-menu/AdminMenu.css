@@ -1,6 +1,6 @@
 .admin-menu-container{
     display: flex;
-    padding: 50px;
+    padding: 20px;
 }
 
 .option-page{
@@ -16,5 +16,5 @@
     flex-direction: column;
     row-gap: 30px;
     align-items: start;
-    width: 300px;
+    width: 200px;
 }

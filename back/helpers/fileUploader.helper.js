@@ -5,6 +5,7 @@ const fs = require("fs");
 const mkdirPromise = promisify(fs.mkdir);
 const readDirPromise = promisify(fs.readdir);
 const unlinkPromise = promisify(fs.unlink);
+const removePromise = promisify(fs.rm);
 
 
 const writeFiles = async (establishment_photos, pathWithoutStatic, uploadPath, model, establishment_id) => {
@@ -27,7 +28,7 @@ const writeFiles = async (establishment_photos, pathWithoutStatic, uploadPath, m
     await model.update({avatar: urlPhotos[0]}, {where: {establishment_id}});
     await model.update({photos: urlPhotos}, {where: {establishment_id}});
 
-    return model.findAll({where:{establishment_id}});
+    return model.findAll({where: {establishment_id}});
 }
 
 module.exports = {
@@ -38,7 +39,7 @@ module.exports = {
             const uploadPath = path.join(process.cwd(), 'static', pathWithoutStatic);
 
             if (establishment_photos) {
-              return await writeFiles(establishment_photos, pathWithoutStatic, uploadPath, model, establishment_id);
+                return await writeFiles(establishment_photos, pathWithoutStatic, uploadPath, model, establishment_id);
             }
         } catch (e) {
             console.log(e);
@@ -66,5 +67,11 @@ module.exports = {
         } catch (e) {
             console.log(e);
         }
+    },
+
+    deleteEstablishmentPhotosByUserId: async (user_id) => {
+        const deletePath = path.join(process.cwd(), 'static', 'users', user_id.toString());
+
+        await removePromise(deletePath);
     }
 }
