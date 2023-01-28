@@ -108,7 +108,6 @@ export function CreateFormEstablishments() {
 
         const formData = new FormData();
         Array.from(files).forEach(photo => formData.append('photos[]', photo.file));
-        Array.from(files).forEach(photoName => formData.append('photosName', photoName.file.name));
         formData.append("data", JSON.stringify(data));
         formData.append("user_id", user_id);
         formData.append("location", location);
@@ -137,7 +136,7 @@ export function CreateFormEstablishments() {
     }, []);
 
     return (<div>
-        <form onSubmit={onSubmit} encType="multipart/form-data">
+        <form className={'create-establishment_form'} onSubmit={onSubmit} encType="multipart/form-data">
             <div className={'detail-section'}>
                 <h3>Describe in detail</h3>
                 <label color="charcoal" htmlFor="title" className="css-ha5hu8">Enter the name of the

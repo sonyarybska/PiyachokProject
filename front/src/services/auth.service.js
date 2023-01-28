@@ -7,6 +7,8 @@ const login = (tokenId) => {
     return async (dispatch) => {
         const response = await axiosInstance.post('/users', {tokenId});
 
+        console.log(response);
+
         localStorage.setItem('access_token', response.data.tokens.access_token);
 
         localStorage.setItem('button', 'true');

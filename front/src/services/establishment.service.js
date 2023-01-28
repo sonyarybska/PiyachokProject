@@ -1,7 +1,7 @@
 import {axiosInstance} from "./axios.service";
 
 
-const fetchEstablishments = async (page, limit, title, sort, type, filterByRating, filterByCheck, approved) => {
+const fetchEstablishments = async (page, limit, title, sort, type, filterByRating, filterByCheck,pending,approved,rejected) => {
     const response = await axiosInstance.get(`/establishments`, {
         params: {
             page,
@@ -11,7 +11,9 @@ const fetchEstablishments = async (page, limit, title, sort, type, filterByRatin
             type,
             filterByRating,
             filterByCheck,
-            approved
+            pending,
+            approved,
+            rejected
         }
     });
 
@@ -25,13 +27,13 @@ const fetchOneEstablishment = async (id) => {
 
 const postEstablishments = async (data) => {
     const response = (await axiosInstance.post('/establishments', data).catch(err => err.response));
-    console.log(response);
+
     return response.data.message ? alert(response.data.message) : response;
 };
 
 const putEstablishments = async (data, id) => {
     const response = await axiosInstance.put(`/establishments/${id}`, data).catch(err => err.response);
-
+    console.log(response);
     return response.data.message ? alert(response.data.message) : response;
 };
 
@@ -47,7 +49,8 @@ const deleteEstablishment = async (id) => {
 }
 
 const getTypeEstablishments = async () => {
-    const response = await axiosInstance.get(`/establishments/type`);
+    const response = await axiosInstance.get(`/establishments/type`).catch(e=> console.log(e));
+
     return response;
 }
 
@@ -65,12 +68,6 @@ const getEstablishmentsByUserId = async (id, page, limit, approved, rejected, pe
     return response;
 }
 
-const getEstablishmentsByUserIdAndByType = async (id, type) => {
-    const response = await axiosInstance.get(`/establishments/users/${id}/${type}`);
-
-    return response.data;
-}
-
 export {
     fetchEstablishments,
     postEstablishments,
@@ -80,5 +77,4 @@ export {
     fetchOneEstablishment,
     deleteEstablishment,
     getEstablishmentsByUserId,
-    getEstablishmentsByUserIdAndByType
 };

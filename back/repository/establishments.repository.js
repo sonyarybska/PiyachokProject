@@ -17,7 +17,9 @@ module.exports = {
                 type = null,
                 filterByRating = null,
                 filterByCheck = null,
-                approved = false
+                approved = null,
+                rejected = null,
+                pending = null
             } = query;
 
 
@@ -32,24 +34,34 @@ module.exports = {
                 betweenRating = filterByRating.split('-')[1].split(',').map(i => Number(i));
             }
 
-
             let findObj = {};
 
             let establishments;
 
-
-            if (approved) {
-                establishments = await Establishment.findAll({
-                    where: {approved: true}, limit,
-                    offset: (page - 1) * limit
-                });
-            } else if (title) {
+            if (title) {
                 findObj = {...findObj, title: {[Op.iRegexp]: title,}};
                 establishments = await Establishment.findAll({
                     where: findObj, limit,
                     offset: (page - 1) * limit
-                });
-
+                })
+            } else if (approved && !filterByRating && !filterByCheck && !sort && !type) {
+                establishments = await Establishment.findAll({
+                    where: {approved:true},
+                    limit,
+                    offset: (page - 1) * limit
+                })
+            } else if (pending && !filterByRating && !filterByCheck && !sort && !type) {
+                establishments = await Establishment.findAll({
+                    where: {pending:true},
+                    limit,
+                    offset: (page - 1) * limit
+                })
+            } else if (rejected && !filterByRating && !filterByCheck && !sort && !type) {
+                establishments = await Establishment.findAll({
+                    where: {rejected:true},
+                    limit,
+                    offset: (page - 1) * limit
+                })
             } else if (filterByRating && !filterByCheck && !sort && !type) {
                 establishments = (await Establishment.findAll({
                     attributes: {
@@ -274,7 +286,7 @@ module.exports = {
 
             } else if (type && filterByRating && filterByCheck && sort) {
                 establishments = await Establishment.findAll({
-                    where: {type, approved:true},
+                    where: {type, approved: true},
                     include: [{
                         model: Review, as: 'review', attributes: [],
                     },],
@@ -294,7 +306,6 @@ module.exports = {
 
                 establishments = await Establishment.findAll({where: {type}, limit, offset: (page - 1) * limit});
             } else {
-
                 establishments = await Establishment.findAll({limit, offset: (page - 1) * limit});
             }
 
@@ -303,7 +314,7 @@ module.exports = {
             const maxCheck = await Establishment.max('average_check');
 
             return {
-                establishments, page, count, maxCheck
+                establishments, count, maxCheck
             }
         } catch (e) {
             throw new ApiError(e.message, 400);
@@ -325,8 +336,6 @@ module.exports = {
 
             let establishments;
             let count;
-
-            console.log(query);
 
             if (approved) {
                 establishments = await Establishment.findAll({

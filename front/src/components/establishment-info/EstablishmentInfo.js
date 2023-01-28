@@ -8,10 +8,11 @@ import {getOneEstablishments} from "../../redux/actions/actions";
 import {Reviews} from "../reviews/Reviews";
 import {News} from "../news/News";
 import {addToFavorite, changeFavorite} from "../../helpers/favorite.helper";
+import {AuthRequest} from "../auth-request/AuthRequest";
 
 export function EstablishmentInfo() {
     const {one_establishment} = useSelector(state => state.establishmentReducer);
-    const {user: {user_id}, isAuth} = useSelector(state => state.userReducer);
+    const {user: {user_id}, isAuth, isForbidden} = useSelector(state => state.userReducer);
 
     const dispatch = useDispatch();
     const {state} = useLocation();
@@ -24,11 +25,9 @@ export function EstablishmentInfo() {
 
     const favoriteIcon = createRef();
 
-    useEffect(async () => {
-        const item = await fetchOneEstablishment(state?.establishment_id);
-        dispatch(getOneEstablishments(item.data[0]));
-    }, [])
-
+    useEffect( () => {
+        fetchOneEstablishment(state?.establishment_id).then(item=>dispatch(getOneEstablishments(item.data)));
+    }, [dispatch, state?.establishment_id])
 
     const prevImage = () => {
         if (image > 0) {
@@ -68,11 +67,10 @@ export function EstablishmentInfo() {
                 <h1>{one_establishment.title}</h1>
                 {
                     <div className={'slider'}>
-                        <button disabled={!!state.loginRequest} onClick={prevImage}>{'<'}</button>
+                        <button disabled={!!isForbidden} onClick={prevImage}>{'<'}</button>
 
                         <div className={`slide`}>
-                            {! state?.loginRequest? <Link to={`previewSlider?index=${image}`}
-                                                          state={{title: one_establishment.title}}>
+                             <Link style={{pointerEvents:isForbidden?"none":''}} to={`previewSlider?index=${image}`} state={{title: one_establishment.title}}>
                                 <div className={`image`} style={{
                                     background: `url(${'http://localhost:4000/' + one_establishment?.photos?.[image]?.replace(/\\/g, '/')}) center center / cover no-repeat`,
                                 }}>
@@ -87,27 +85,12 @@ export function EstablishmentInfo() {
                                         }
                                     </div>
                                 </div>
-                            </Link>:
-                                <div className={`image`} style={{
-                                background: `url(${'http://localhost:4000/' + one_establishment?.photos?.[image]?.replace(/\\/g, '/')}) center center / cover no-repeat`,
-                            }}>
-                                <div className={'swiper-container'}>
-                                    {
-                                        one_establishment?.photos?.map((item, index) => {
-                                            return (
-                                                <div
-                                                    className={index === image ? 'active swiper-pagination' : 'swiper-pagination'}></div>
-                                            )
-                                        })
-                                    }
-                                </div>
-                            </div>
-                            }
+                            </Link>
 
                             <i onClick={(e) => addToFavoriteList(e)} ref={favoriteIcon} className="fa fa-heart"
                                style={{fontSize: "34", color: 'black'}}></i>
                         </div>
-                        <button disabled={!!state.loginRequest} onClick={nextImage}>{'>'}</button>
+                        <button disabled={!!isForbidden} onClick={nextImage}>{'>'}</button>
                     </div>
                 }
             </div>
@@ -115,6 +98,9 @@ export function EstablishmentInfo() {
                 <p>News</p>
                 {one_establishment.user_id === user_id ? <News/> : ''}
             </div>
+            {
+                isForbidden && <AuthRequest/>
+            }
 
             <Routes>
                 <Route path={'/'} element={<Reviews establishment_id={one_establishment?.establishment_id}/>}/>

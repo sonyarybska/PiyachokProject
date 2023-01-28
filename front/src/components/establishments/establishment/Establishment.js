@@ -26,7 +26,7 @@ export function Establishment({item, sortFunction, loginRequest}) {
 
     useEffect(() => {
         if (establishment_id) {
-            fetchRatingByEstablishmentId(establishment_id).then(rate => setRating(rate[0]?.avgRating));
+            fetchRatingByEstablishmentId(establishment_id).then(rate => setRating(rate?.avgRating));
         }
     }, [sortFunction]);
 

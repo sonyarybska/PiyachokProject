@@ -13,7 +13,7 @@ const client = new OAuth2Client(CLIENT_ID);
 
 module.exports = {
     generateTokens: (payload) => {
-        const access_token = jwt.sign(payload, JWT_ACCESS_SECRET, {expiresIn: '15s'});
+        const access_token = jwt.sign(payload, JWT_ACCESS_SECRET, {expiresIn: '24h'});
         const refresh_token = jwt.sign(payload, JWT_REFRESH_SECRET, {expiresIn: '30d'});
 
         return {
@@ -59,9 +59,11 @@ module.exports = {
 
     verifyGoogleId(id) {
         return client.verifyIdToken({
-            idToken: id,
-            audience: CLIENT_ID
-        });
-    },
+         idToken: id,
+         audience: CLIENT_ID
+     }).catch(e => {
+         throw new ApiError(e.message, 405)
+     });
 
+    },
 }

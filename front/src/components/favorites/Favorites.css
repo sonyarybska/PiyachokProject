@@ -1,8 +1,8 @@
 .favorite-box{
     padding: 50px;
     display: flex;
-    column-gap: 50px;
+    column-gap: 20px;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: start;
+    justify-content: center;
 }

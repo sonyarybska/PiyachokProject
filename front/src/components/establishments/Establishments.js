@@ -5,9 +5,11 @@ import {useEffect, useState} from "react";
 import {fetchEstablishments, getTypeEstablishments} from "../../services/establishment.service";
 import {useLocation} from "react-router-dom";
 import {AuthRequest} from "../auth-request/AuthRequest";
+import {useSelector} from "react-redux";
 
 
 export function Establishments({admin}) {
+    const {isForbidden} = useSelector(state => state.userReducer);
     const [establishments, setEstablishments] = useState([]);
 
     const [types, setTypes] = useState([]);
@@ -28,7 +30,7 @@ export function Establishments({admin}) {
 
     useEffect(() => {
         if (fetching) {
-            fetchEstablishments(currenPage, 8, state?.title, sortType, currentType, filterByRating, filterByCheck,true).then(value => {
+            fetchEstablishments(currenPage, 8, state?.title, sortType, currentType, filterByRating, filterByCheck).then(value => {
                 setEstablishments([...establishments, ...value.data.establishments]);
                 setTotalCount(value?.data?.count);
                 setMaxCheck(value.data.maxCheck);
@@ -156,7 +158,7 @@ export function Establishments({admin}) {
         {!admin && <div className={'filter-box'}>
             <div className={'filter-item'}>
                 <p>Sort by</p>
-                <select className={state?.loginRequest ? 'disable_filter' : ''} onChange={onChangeSort}>
+                <select className={isForbidden ? 'disable_filter' : ''} onChange={onChangeSort}>
                     <option value={''}>Without sort</option>
                     <option value="average_check-DESC">Sort by average check (descending)</option>
                     <option value="average_check-ASC">Sort by average check (ascending)</option>
@@ -171,7 +173,7 @@ export function Establishments({admin}) {
 
             <div className={'filter-item'}>
                 <p>Type of establishment</p>
-                <select className={state?.loginRequest ? 'disable_filter' : ''} onChange={onChangeType} name="" id="">
+                <select className={isForbidden ? 'disable_filter' : ''} onChange={onChangeType} name="" id="">
                     <option value={''}>Any type</option>
                     {types.map((value, index) => <option key={index} value={value.title}>{value.title}</option>)}
                 </select>
@@ -180,8 +182,8 @@ export function Establishments({admin}) {
             <div className={'filter-item'}>
                 <p>Rating</p>
                 <form className={'between-form'} onSubmit={onSubmitFilterRating} name={'rating'} action="">
-                    <input className={state?.loginRequest ? 'disable_filter' : ''} type="number"/>
-                    <input className={state?.loginRequest ? 'disable_filter' : ''} type="number"/>
+                    <input className={isForbidden ? 'disable_filter' : ''} type="number"/>
+                    <input className={isForbidden ? 'disable_filter' : ''} type="number"/>
                     <button> filter</button>
                 </form>
             </div>
@@ -189,8 +191,8 @@ export function Establishments({admin}) {
             <div className={'filter-item'}>
                 <p>Average check</p>
                 <form className={'between-form'} onSubmit={onSubmitFilterCheck} name={'average_check'} action="">
-                    <input className={state?.loginRequest ? 'disable_filter' : ''} type="number"/>
-                    <input className={state?.loginRequest ? 'disable_filter' : ''} type="number"/>
+                    <input className={isForbidden ? 'disable_filter' : ''} type="number"/>
+                    <input className={isForbidden ? 'disable_filter' : ''} type="number"/>
                     <button>filter</button>
                 </form>
             </div>
@@ -204,7 +206,7 @@ export function Establishments({admin}) {
             {establishments.length ? establishments?.map((value, index) => {
                 if(value.approved){
                   return <Establishment
-                        loginRequest={state?.loginRequest}
+                        loginRequest={isForbidden}
                         sortFunction={onChangeSort}
                         key={index}
                         item={value}/>
@@ -214,7 +216,7 @@ export function Establishments({admin}) {
                 <div>No result</div>}
         </div>
         {
-            state?.loginRequest && <AuthRequest/>
+            isForbidden && <AuthRequest/>
         }
     </div>)
 }

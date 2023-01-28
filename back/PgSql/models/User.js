@@ -29,9 +29,6 @@ module.exports = (client) => {
                 type: DataTypes.BOOLEAN,
                 defaultValue: false
             },
-            phone_number: {
-                type: DataTypes.STRING,
-            },
             createdAt: {
                 field: 'created_at',
                 type: Sequelize.DATE,

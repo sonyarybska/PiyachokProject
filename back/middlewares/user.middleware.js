@@ -4,6 +4,7 @@ const db = require('../PgSql').getInstance();
 module.exports = {
     checkGoogleId: async (req, res, next) => {
         try {
+            console.log(req.body);
             const data = await verifyGoogleId(req.body.tokenId);
 
             const {email_verified, name, email, picture} = data.payload;

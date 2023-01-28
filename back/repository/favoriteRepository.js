@@ -7,7 +7,6 @@ module.exports = {
             const Favorite = db.getModel('Favorite');
             const Establishment = db.getModel('Establishment');
 
-
             const {limit = 12, page = 1} = query;
 
             const favorite = await Favorite.findAll({

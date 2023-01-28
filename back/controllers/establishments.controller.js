@@ -1,17 +1,19 @@
 const db = require('../PgSql').getInstance();
 
 const {
-    postEstablishmentPhotos, updateEstablishmentPhotos
+    postEstablishmentPhotos, updateEstablishmentPhotos, deleteEstablishmentPhotosByEstablishmentsId
 } = require("../helpers/fileUploader.helper");
 
 const {establishmentRepository} = require("../repository/index");
+const {CREATED, OK, NO_CONTENT} = require("../errors/status-enum");
+const {DELETE_ITEM, ADD_ITEM, UPDATE_ITEM} = require("../errors/message-enum");
 
 module.exports = {
     getEstablishments: async (req, res) => {
         try {
             const establishments = await establishmentRepository.find(req.query);
 
-            res.json(establishments);
+            res.status(OK).json(establishments);
         } catch (e) {
             res.json(e.message)
         }
@@ -21,9 +23,9 @@ module.exports = {
         try {
             const Establishment = db.getModel('Establishment');
 
-            const establishment = await Establishment.findAll({where: {establishment_id: req.params.id}});
+            const establishment = await Establishment.findOne({where: {establishment_id: req.params.id}});
 
-            res.json(establishment);
+            res.status(OK).json(establishment);
         } catch (e) {
             res.json(e.message);
         }
@@ -33,11 +35,15 @@ module.exports = {
         try {
             const Establishment = db.getModel('Establishment');
 
-            const {establishment_id} = await (await Establishment.create({...req.body,tags:req.body.tags.split(',')})).dataValues;
+            const {establishment_id} = await (await Establishment.create({
+                ...req.body,
+                tags: req.body.tags.split(',')
+            })).dataValues;
 
-            await postEstablishmentPhotos(req.body.user_id, establishment_id, req.photos, Establishment);
-
-            res.status(200).json('created');
+            if (req.photos) {
+                await postEstablishmentPhotos(req.body.user_id, establishment_id, req.photos, Establishment);
+            }
+            res.status(CREATED).json(ADD_ITEM);
         } catch (e) {
             res.json(e.message);
         }
@@ -49,11 +55,17 @@ module.exports = {
 
             const Review = db.getModel('Review');
 
+            const Favorite = db.getModel('Favorite');
+
             await Establishment.destroy({where: {establishment_id: req.params.id}});
 
             await Review.destroy({where: {establishment_id: req.params.id}});
 
-            res.json('Deleted')
+            await Favorite.destroy({where: {establishment_id: req.params.id}});
+
+            await deleteEstablishmentPhotosByEstablishmentsId(req.params.id)
+
+            res.status(NO_CONTENT).json(DELETE_ITEM)
         } catch (e) {
             res.json(e.message)
         }
@@ -72,7 +84,7 @@ module.exports = {
                 await updateEstablishmentPhotos(req.body.user_id, updatedData[1].dataValues.establishment_id, req.files, Establishment);
             }
 
-            res.json('updated');
+            res.status(NO_CONTENT).json(UPDATE_ITEM);
         } catch (e) {
             res.json(e.message);
         }
@@ -88,34 +100,19 @@ module.exports = {
                 where: {establishment_id: req.params.id},
             });
 
-            res.json('updated');
+            res.status(NO_CONTENT).json(UPDATE_ITEM);
         } catch (e) {
             res.json(e.message);
         }
     },
 
     getEstablishmentsByUserId: async (req, res) => {
-        try{
-            const establishments = await establishmentRepository.findByUserId(req.query,req.params.id)
+        try {
+            const establishments = await establishmentRepository.findByUserId(req.query, req.params.id)
 
-            res.json(establishments);
-        }catch (e){
+            res.status(OK).json(establishments);
+        } catch (e) {
             res.json(e.message);
-        }
-
-    },
-
-    getEstablishmentsByTypeAndUserId: async (req, res) => {
-        try{
-            const Establishment = db.getModel('Establishment');
-
-            const {id, type} = req.params
-
-            const establishments = await Establishment.findAll({where: {user_id: id, type}, raw: true});
-
-            res.json(establishments);
-        }catch (e) {
-            res.json(e.message)
         }
 
     },
@@ -127,9 +124,9 @@ module.exports = {
 
             const types = await Type_Establishments.findAll({});
 
-            res.json(types);
+            res.status(OK).json(types);
         } catch (e) {
-            res.json(e.message);
+            res.status(400).json(e.message);
         }
     }
 };

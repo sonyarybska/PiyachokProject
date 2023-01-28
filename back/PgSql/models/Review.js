@@ -42,7 +42,7 @@ module.exports = (client) => {
 
 
     Establishment.hasMany(Review, {as: 'review', foreignKey:'establishment_id' });
-    Review.belongsTo(Establishment, { as: 'establishment', foreignKey:'establishment_id' });
+    Review.belongsTo(Establishment, { as: 'establishment', foreignKey:'establishment_id'});
 
     return Review;
 }

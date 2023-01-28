@@ -1,7 +1,7 @@
 import './OneUserReview.css';
 import ReactStars from "react-stars";
 
-export function OneUserReview({value}) {
+export function OneUserReview({value, deleteItem}) {
     return (
         <div className={'review-item'}>
             <div className={'establishment-item-review'}>
@@ -11,12 +11,13 @@ export function OneUserReview({value}) {
                 }}></div>}
                 <p>{value?.establishment?.title}</p>
             </div>
-            <div className={'review-text'}>{
-                <div>
+
+                <div className={'review-text'}>
                     <p>{value?.text}</p>
-                    <ReactStars edit={false} count={5} value={value?.rating}/>
+                    <ReactStars className={'rating-review'} edit={false} count={5} value={value?.rating}/>
                 </div>
-            }</div>
+
+            <button onClick={()=>deleteItem(value.review_id)}>Delete</button>
         </div>
     )
 }

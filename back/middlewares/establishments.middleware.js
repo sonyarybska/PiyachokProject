@@ -3,9 +3,10 @@ const {ApiError} = require("../errors/ApiError");
 module.exports = {
     isBodyValid: (validator) => (req, res, next) => {
         try {
-            const {user_id, location, photosName} = req.body;
+            const {user_id, location} = req.body;
 
-            const data = {...JSON.parse(req.body.data), user_id, location, photosName};
+
+            const data = {...JSON.parse(req.body.data), user_id, location};
 
             const {error, value} = validator.validate(data);
 

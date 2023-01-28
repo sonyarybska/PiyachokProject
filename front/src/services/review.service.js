@@ -1,13 +1,10 @@
-import {setReviews} from "../redux/actions/actions";
 import {axiosInstance} from "./axios.service";
 
 
-const fetchReviewsByEstablishmentId = (id) => {
-    return async (dispatch) => {
-        const response = await axiosInstance.get(`/reviews/${id}`, );
+const fetchReviewsByEstablishmentId = async (id, page, limit, sort) => {
+    const response = await axiosInstance.get(`/reviews/${id}`, {params: {page, limit, sort}});
 
-        dispatch(setReviews(response.data));
-    }
+    return response
 }
 
 const fetchRatingByEstablishmentId = async (id) => {
@@ -17,7 +14,12 @@ const fetchRatingByEstablishmentId = async (id) => {
 }
 
 const fetchReviewsByUserId = async (id, page, limit) => {
-    const response = await axiosInstance.get(`/reviews/users/${id}`,{params: {page, limit}}).catch(e => console.log(e.message));
+    const response = await axiosInstance.get(`/reviews/users/${id}`, {
+        params: {
+            page,
+            limit
+        }
+    }).catch(e => console.log(e.message));
 
     return response.data;
 }
@@ -28,5 +30,11 @@ const postReview = async (data) => {
     return response;
 }
 
+const deleteReview = async (id) => {
+    const response = await axiosInstance.delete(`/reviews/${id}`);
 
-export {fetchReviewsByEstablishmentId, postReview, fetchRatingByEstablishmentId, fetchReviewsByUserId};
+    return response;
+}
+
+
+export {fetchReviewsByEstablishmentId, postReview, fetchRatingByEstablishmentId, fetchReviewsByUserId, deleteReview};

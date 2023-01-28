@@ -2,9 +2,11 @@ import axios from "axios";
 import {axiosInstance} from "../../services/axios.service";
 import {useEffect, useRef} from "react";
 import {useNavigate} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {setForbidden} from "../../redux/actions/actions";
 
 export function ResponseInterceptor() {
-    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const interceptorId = useRef(null);
 
@@ -13,6 +15,7 @@ export function ResponseInterceptor() {
             return config;
         }, async (error) => {
             const originalRequest = error.config;
+
             if (error?.response?.status === 401) {
                 try {
                     const response = await axios.get('http://localhost:4000/auth/refresh', {withCredentials: true});
@@ -24,7 +27,7 @@ export function ResponseInterceptor() {
                     console.log(e)
                 }
             } else if (error?.response?.status === 403) {
-                navigate(`${window.location.pathname}`,{state:{loginRequest:true}});
+                dispatch(setForbidden(true));
                 return true;
             }
             throw error;

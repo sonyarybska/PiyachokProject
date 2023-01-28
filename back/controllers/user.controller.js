@@ -1,6 +1,8 @@
 const {saveToken} = require("../services/auth.service");
 const {generateTokens} = require("../services/auth.service");
 const {deleteEstablishmentPhotosByUserId} = require("../helpers/fileUploader.helper");
+const {DELETE_ITEM, UPDATE_ITEM} = require("../errors/message-enum");
+const {NO_CONTENT, CREATED, OK} = require("../errors/status-enum");
 const db = require('../PgSql').getInstance();
 
 module.exports = {
@@ -10,7 +12,7 @@ module.exports = {
 
             const users = await User.findAll({});
 
-            res.json(users);
+            res.status(OK).json(users);
         } catch (e) {
             res.json(e.message)
         }
@@ -20,9 +22,9 @@ module.exports = {
         try {
             const User = db.getModel('User');
 
-            const user = await User.findOne({where: {user_id: req.params.id}});
+            const user = await User.findOne({where: {user_id: req.params.user_id}});
 
-            res.json(user);
+            res.status(OK).json(user);
         } catch (e) {
             res.json(e.message);
         }
@@ -44,7 +46,7 @@ module.exports = {
 
             res.cookie('refreshToken', tokens.refresh_token, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
 
-            res.json({user: user.dataValues, tokens});
+            res.status(CREATED).json({user: user.dataValues, tokens});
         } catch (e) {
             res.json(e.message)
         }
@@ -57,17 +59,17 @@ module.exports = {
             const Review = db.getModel('Review');
             const Establishment = db.getModel('Establishment');
 
-            await User.destroy({where: {user_id: req.params.id}});
+            await User.destroy({where: {user_id: req.params.user_id}});
 
-            await Token.destroy({where: {user_id: req.params.id}});
+            await Token.destroy({where: {user_id: req.params.user_id}});
 
-            await Review.destroy({where: {user_id: req.params.id}});
+            await Review.destroy({where: {user_id: req.params.user_id}});
 
-            await Establishment.destroy({where: {user_id: req.params.id}});
+            await Establishment.destroy({where: {user_id: req.params.user_id}});
 
-            await deleteEstablishmentPhotosByUserId(req.params.id);
+            await deleteEstablishmentPhotosByUserId(req.params.user_id);
 
-            res.json('Deleted');
+            res.status(NO_CONTENT).json(DELETE_ITEM);
         } catch (e) {
             res.json(e.message)
         }
@@ -77,9 +79,9 @@ module.exports = {
         try {
             const User = db.getModel('User');
 
-           const user = await User.update({...req.body}, {where: {user_id: req.params.id},  returning: true, plain: true});
+            await User.update({...req.body}, {where: {user_id: +req.params.user_id},  returning: true, plain: true});
 
-            res.json(user[1]);
+            res.status(NO_CONTENT).json(UPDATE_ITEM);
         } catch (e) {
             res.json(e.message);
         }

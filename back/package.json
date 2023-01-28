@@ -17,6 +17,7 @@
     "mysql2": "^2.3.3",
     "pg": "^8.7.3",
     "sequelize": "^6.21.3",
+    "swagger-ui-express": "^4.6.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

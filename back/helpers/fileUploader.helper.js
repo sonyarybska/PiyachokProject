@@ -9,8 +9,9 @@ const removePromise = promisify(fs.rm);
 
 
 const writeFiles = async (establishment_photos, pathWithoutStatic, uploadPath, model, establishment_id) => {
-    await Promise.all(establishment_photos['photos[]'].map(async photos => {
-        const fileExtension = path.extname(photos.name);
+
+    if (typeof establishment_photos['photos[]'] === 'object' && !Array.isArray(establishment_photos['photos[]'])) {
+        const fileExtension = path.extname(establishment_photos['photos[]'].name);
 
         const photoName = `${uuid()}${fileExtension}`;
 
@@ -18,8 +19,20 @@ const writeFiles = async (establishment_photos, pathWithoutStatic, uploadPath, m
 
         await mkdirPromise(uploadPath, {recursive: true});
 
-        await photos.mv(finalPath);
-    }));
+        await establishment_photos['photos[]'].mv(finalPath);
+    } else {
+        await Promise.all(establishment_photos['photos[]'].map(async photos => {
+            const fileExtension = path.extname(photos.name);
+
+            const photoName = `${uuid()}${fileExtension}`;
+
+            const finalPath = path.join(uploadPath, photoName);
+
+            await mkdirPromise(uploadPath, {recursive: true});
+
+            await photos.mv(finalPath);
+        }));
+    }
 
     const uploadedFiles = await readDirPromise(path.join(uploadPath));
 
@@ -72,6 +85,21 @@ module.exports = {
     deleteEstablishmentPhotosByUserId: async (user_id) => {
         const deletePath = path.join(process.cwd(), 'static', 'users', user_id.toString());
 
-        await removePromise(deletePath);
+        await removePromise(deletePath, {recursive: true, force: true});
+    },
+
+    deleteEstablishmentPhotosByEstablishmentsId: async (id) => {
+        const deletePath = path.join(process.cwd(), 'static', 'users');
+
+        const users = await readDirPromise(deletePath);
+
+        users.map(async user => {
+            const usersEstablishments = await readDirPromise(path.join(deletePath, user));
+            for (const item of usersEstablishments) {
+                if (item === id) {
+                    await removePromise(path.join(deletePath, user, item), {recursive: true, force: true});
+                }
+            }
+        })
     }
 }

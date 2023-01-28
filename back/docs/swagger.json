@@ -1,0 +1,1217 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "Piyachok"
+  },
+  "paths": {
+    "/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get all users",
+        "operationId": "getAllUsers",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "description": "Set `access_token` from /auth",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "You get all users",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/singleUser"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Adds a new user",
+        "tags": [
+          "Users"
+        ],
+        "operationId": "postUser",
+        "parameters": [
+          {
+            "name": "body",
+            "description": "You need to send a valid `google id token`",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tokenId": {
+                  "type": "string",
+                  "default": "token_id"
+                }
+              }
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User is added",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "$ref": "#/definitions/singleUser"
+                },
+                "tokens": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string",
+                      "example": "access token"
+                    },
+                    "refresh_token": {
+                      "type": "string",
+                      "example": "refresh token"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "get": {
+        "summary": "Get one user",
+        "tags": [
+          "Users"
+        ],
+        "operationId": "getOneUser",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "description": "Set `access_token` from /auth",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/singleUser"
+            },
+            "description": "You got one user"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Put one user",
+        "operationId": "updateOneUser",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Cоня Рибська",
+                  "description": "username"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "sofaribska@gmail.com",
+                  "description": "user email"
+                },
+                "picture": {
+                  "type": "string",
+                  "example": "https://lh3.googleusercontent.com/a/AEdFTp6_rN4O1Ov60r9HOguESrCn8OMHvDsHhN3wpnPYxg=s96-c",
+                  "description": "user google avatar"
+                },
+                "admin": {
+                  "type": "boolean",
+                  "example": true,
+                  "default": "false",
+                  "description": "is user admin"
+                }
+              }
+            }
+          },
+          {
+            "name": "user_id",
+            "in": "path",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "description": "Set `access_token` from /auth",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "User is updated"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Delete one user",
+        "operationId": "deleteOneUser",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "description": "Set `access_token` from /auth",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "User is deleted"
+          }
+        }
+      }
+    },
+    "/establishments": {
+      "get": {
+        "tags": [
+          "Establishments"
+        ],
+        "summary": "Get all establishments",
+        "operationId": "getAllEstablishments",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "type": "number"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "number"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "type": "string",
+            "enum": [
+              "title-DESC",
+              "title-ASC",
+              "average_check-DESC",
+              "average_check-ASC",
+              "avgRating-DESC",
+              "avgRating-ASC",
+              "created_at-DESC",
+              "created_at-ASC"
+            ]
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "enum": [
+              "Hookah bar",
+              "Restoraunt",
+              "Cafe",
+              "Bar",
+              "Beer establishment",
+              "Winery",
+              "Club"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "filterByRating",
+            "type": "string",
+            "in": "query",
+            "default": "rating-0,5",
+            "description": "Set diapason between `,`, example: `rating-3,5` - that mean rating diapason is from `3` to `5`. Allowable diapason `from 0 to 5`"
+          },
+          {
+            "name": "filterByCheck",
+            "type": "string",
+            "in": "query",
+            "default": "averageCheck-500,1000",
+            "description": "Set diapason between `,`, example: `averageCheck-500,1000` - that mean rating diapason is from `500` to `1000`"
+          },
+          {
+            "name": "approved",
+            "type": "boolean",
+            "in": "query",
+            "default": true,
+            "description": "Use only `when other query params not used` except `limit` and  `page`"
+          },
+          {
+            "name": "rejected",
+            "type": "boolean",
+            "in": "query",
+            "default": false,
+            "description": "Use only `when other query params not used` except `limit` and  `page`"
+          },
+          {
+            "name": "pending",
+            "type": "boolean",
+            "in": "query",
+            "default": false,
+            "description": "Use only `when other query params not used` except `limit` and  `page`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "You get all establishments",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "establishment": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/singleEstablishment"
+                  }
+                },
+                "count": {
+                  "type": "number",
+                  "example": 27
+                },
+                "maxCheck": {
+                  "type": "number",
+                  "example": 5000
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Establishments"
+        ],
+        "summary": "Add a new establishment",
+        "operationId": "postOneEstablishment",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "type": "array",
+            "in": "formData",
+            "name": "photos[]",
+            "required": true,
+            "items": {
+              "type": "file",
+              "format": "binary"
+            }
+          },
+          {
+            "name": "data",
+            "in": "formData",
+            "type": "string",
+            "description": "JSON stringify object",
+            "default": {
+              "title": "fefer",
+              "type": "Restoraunt",
+              "tags": "efe",
+              "start_work": "13:17",
+              "end_work": "14:17",
+              "phone": "+380986649500",
+              "average_check": "1500"
+            }
+          },
+          {
+            "name": "user_id",
+            "in": "formData",
+            "type": "number"
+          },
+          {
+            "name": "location",
+            "in": "formData",
+            "type": "string",
+            "default": "Lychakivska Street, 23, Lviv, Lviv Oblast, Ukraine"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "description": "Set `access_token` from /auth",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Establishment is added"
+          }
+        }
+      }
+    },
+    "/establishments/{id}": {
+      "get": {
+        "summary": "Get one establishment",
+        "operationId": "getOneEstablishment",
+        "tags": [
+          "Establishments"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "number",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/singleEstablishment"
+            },
+            "description": "You get one establishment"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update establishment",
+        "operationId": "putOneEstablishment",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "tags": [
+          "Establishments"
+        ],
+        "parameters": [
+          {
+            "type": "array",
+            "in": "formData",
+            "name": "photos[]",
+            "required": true,
+            "items": {
+              "type": "file",
+              "format": "binary"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "data",
+            "type": "string",
+            "in": "formData",
+            "description": "JSON stringify object",
+            "required": true,
+            "default": {
+              "title": "fefer",
+              "type": "Restoraunt",
+              "tags": "[efe]",
+              "start_work": "13:17",
+              "end_work": "14:17",
+              "phone": "+380986649500",
+              "average_check": "1500"
+            }
+          },
+          {
+            "name": "user_id",
+            "in": "formData",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "location",
+            "in": "formData",
+            "type": "string",
+            "default": "Lychakivska Street, 23, Lviv, Lviv Oblast, Ukraine",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "description": "Set `access_token` from /auth",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Establishment is updated"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update current state establishment",
+        "operationId": "patchOneEstablishment",
+        "tags": [
+          "Establishments"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "description": "Set `access_token` from /auth",
+            "required": true
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "approved": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "pending": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "rejected": {
+                  "type": "boolean",
+                  "default": false
+                }
+              }
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Establishment is updated"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete one establishment",
+        "tags": [
+          "Establishments"
+        ],
+        "operationId": "deleteOneEstablishment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "description": "Set `access_token` from /auth",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Establishment is deleted"
+          }
+        }
+      }
+    },
+    "/establishments/type": {
+      "get": {
+        "summary": "Get establishments types",
+        "tags": [
+          "Establishments"
+        ],
+        "operationId": "getEstablishmentsTypes",
+        "parameters": [
+        ],
+        "responses": {
+          "204": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/singleType"
+              }
+            },
+            "description": "You got establishments types"
+          }
+        }
+      }
+    },
+    "/establishments/users/{id}": {
+      "get": {
+        "summary": "Get users establishments",
+        "operationId": "getUsersEstablishments",
+        "tags": [
+          "Establishments"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "type": "number",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "establishments": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/singleEstablishment"
+                  }
+                },
+                "count": {
+                  "type": "number",
+                  "example": 27
+                }
+              }
+            },
+            "description": "You got users establishments"
+          }
+        }
+      }
+    },
+    "/favorite": {
+      "get": {
+        "summary": "Get favorites",
+        "operationId": "getAllFavorites",
+        "tags": [
+          "Favorites"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/singleFavorite"
+              }
+            },
+            "description": "You got all favorites"
+          }
+        }
+      }
+    },
+    "/favorite/{id}": {
+      "get": {
+        "summary": "Get favorites by user id",
+        "operationId": "getFavoritesByUserId",
+        "tags": [
+          "Favorites"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "description": "Set `access_token` from /auth",
+            "required": true
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "number"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "favorite": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/favoriteWithEstablishment"
+                  }
+                },
+                "count": {
+                  "type": "number",
+                  "example": 27
+                }
+              }
+            },
+            "description": "You got users favorites"
+          }
+        }
+      },
+      "post": {
+        "summary": "Add favorite",
+        "tags": [
+          "Favorites"
+        ],
+        "operationId": "postOneFavorite",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "description": "Set `access_token` from /auth",
+            "required": true
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "establishment_id": {
+                  "type": "number",
+                  "default": "20"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "You add favorite"
+          }
+        }
+      }
+    },
+    "/favorite/{user_id}/{est_id}": {
+      "delete": {
+        "summary": "Delete user favorite",
+        "tags": [
+          "Favorites"
+        ],
+        "operationId": "deleteOneUserFavorite",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "description": "Set `access_token` from /auth",
+            "required": true
+          },
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "est_id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "You delete user favorite"
+          }
+        }
+      }
+    },
+    "/reviews": {
+      "post": {
+        "summary": "Add a new review",
+        "operationId": "postOneReview",
+        "tags": [
+          "Reviews"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "description": "Set `access_token` from /auth",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "example": "Good place"
+                },
+                "check": {
+                  "type": "number",
+                  "example": 1500
+                },
+                "user_id": {
+                  "type": "number",
+                  "example": 23
+                },
+                "establishment_id": {
+                  "type": "number",
+                  "example": 119
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "You add a new review"
+          }
+        }
+      }
+    },
+    "/reviews/{id}": {
+      "get": {
+        "summary": "Get reviews by establishment id",
+        "tags": [
+          "Reviews"
+        ],
+        "operationId": "getReviewsByEstablishmentId",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "number"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "number"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "enum": [
+              "created_at-DESC",
+              "created_at-ASC"
+            ],
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "reviews":{
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/singleReviewWithUser"
+                  }
+                },
+                "count": {
+                  "type": "number",
+                  "example": 32
+                }
+              }
+            },
+            "description": "You got reviews by establishment id"
+          }
+        }
+      }
+    },
+    "/reviews/{id}/rating": {
+      "get": {
+        "summary": "Get average establishment rating",
+        "operationId": "getAverageRating",
+        "tags": [
+          "Reviews"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "avgRating": {
+                  "type": "number"
+                }
+              }
+            },
+            "description": "You got average establishment rating"
+          }
+        }
+      }
+    },
+    "/reviews/users/{id}": {
+      "get": {
+        "summary": "Get reviews by user id",
+        "operationId": "getReviewsByUserId",
+        "tags": [
+          "Reviews"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "description": "Set `access_token` from /auth",
+            "required": true
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "number"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "reviews": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/singleReviewWithEstablishment"
+                  }
+                },
+                "count": {
+                  "type": "number",
+                  "example": 27
+                }
+              }
+            },
+            "description": "You got reviews by user id"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "singleUser": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "number",
+          "example": "20",
+          "description": "user id"
+        },
+        "name": {
+          "type": "string",
+          "example": "Cоня Рибська",
+          "description": "username"
+        },
+        "email": {
+          "type": "string",
+          "example": "sofaribska@gmail.com",
+          "description": "user email"
+        },
+        "picture": {
+          "type": "string",
+          "example": "https://lh3.googleusercontent.com/a/AEdFTp6_rN4O1Ov60r9HOguESrCn8OMHvDsHhN3wpnPYxg=s96-c",
+          "description": "user google avatar"
+        },
+        "admin": {
+          "type": "boolean",
+          "example": true,
+          "default": "false",
+          "description": "is user admin"
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2023-01-25 17:53:48.940 +00:00",
+          "description": "when user was created"
+        },
+        "updatedAt": {
+          "type": "string",
+          "example": "2023-01-25 17:53:48.940 +00:00",
+          "description": "when user was updated"
+        }
+      }
+    },
+    "singleEstablishment": {
+      "type": "object",
+      "properties": {
+        "establishment_id": {
+          "type": "number",
+          "example": 112
+        },
+        "title": {
+          "type": "string",
+          "example": "Prime"
+        },
+        "type": {
+          "type": "string",
+          "example": "Restoraunt"
+        },
+        "avatar": {
+          "type": "string",
+          "example": "users\\30\\328\\establishment_photos\\41bbc2b0-9dbc-11ed-b0f9-cb97cc80cc9f.jpg"
+        },
+        "location": {
+          "type": "string",
+          "example": "Lychakivska Street, 23, Lviv, Lviv Oblast, Ukraine"
+        },
+        "start_work": {
+          "type": "string",
+          "example": "19:55:00"
+        },
+        "end_work": {
+          "type": "string",
+          "example": "23:58:00"
+        },
+        "view_statistics": {
+          "type": "number",
+          "example": 10
+        },
+        "tags": {
+          "type": "array",
+          "example": [
+            "bar",
+            "hookan"
+          ]
+        },
+        "average_check": {
+          "type": "number",
+          "example": 1000
+        },
+        "approved": {
+          "type": "number",
+          "example": false
+        },
+        "pending": {
+          "type": "number",
+          "example": false
+        },
+        "rejected": {
+          "type": "number",
+          "example": true
+        },
+        "user_id": {
+          "type": "number",
+          "example": "Lviv"
+        },
+        "photos": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "default": "users\\30\\328\\establishment_photos\\41bbc2b1-9dbc-11ed-b0f9-cb97cc80cc9f.jpg"
+          }
+        },
+        "phone": {
+          "type": "number",
+          "example": "+380986649500"
+        },
+        "createdAt": {
+          "type": "number",
+          "example": "2023-01-25 17:53:48.940 +00:00"
+        },
+        "updatedAt": {
+          "type": "number",
+          "example": "2023-01-25 17:53:48.940 +00:00"
+        }
+      }
+    },
+    "singleType": {
+      "type": "object",
+      "properties": {
+        "type_id": {
+          "type": "number",
+          "example": 1
+        },
+        "title": {
+          "type": "string",
+          "example": "Hookah bar"
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2023-01-25 17:53:48.940 +00:00",
+          "description": "when user was created"
+        },
+        "updatedAt": {
+          "type": "string",
+          "example": "2023-01-25 17:53:48.940 +00:00",
+          "description": "when user was updated"
+        }
+      }
+    },
+    "singleFavorite": {
+      "type": "object",
+      "properties": {
+        "favorite_id": {
+          "type": "number",
+          "example": 1
+        },
+        "user_id": {
+          "type": "number",
+          "example": 23
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2023-01-25 17:53:48.940 +00:00",
+          "description": "when user was created"
+        },
+        "updatedAt": {
+          "type": "string",
+          "example": "2023-01-25 17:53:48.940 +00:00",
+          "description": "when user was updated"
+        }
+      }
+    },
+    "favoriteWithEstablishment": {
+      "type": "object",
+      "properties": {
+        "type_id": {
+          "type": "number",
+          "example": 1
+        },
+        "title": {
+          "type": "string",
+          "example": "Hookah bar"
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2023-01-25 17:53:48.940 +00:00",
+          "description": "when user was created"
+        },
+        "updatedAt": {
+          "type": "string",
+          "example": "2023-01-25 17:53:48.940 +00:00",
+          "description": "when user was updated"
+        },
+        "establishment": {
+          "$ref": "#/definitions/singleEstablishment"
+        }
+      }
+    },
+    "singleReviewWithEstablishment": {
+      "type": "object",
+      "properties": {
+        "review_id": {
+          "type": "number",
+          "example": 2
+        },
+        "text": {
+          "type": "string",
+          "example": "Good place"
+        },
+        "check": {
+          "type": "number",
+          "example": 1500
+        },
+        "user_id": {
+          "type": "number",
+          "example": 23
+        },
+        "establishment_id": {
+          "type": "number",
+          "example": 119
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2023-01-25 17:53:48.940 +00:00",
+          "description": "when user was created"
+        },
+        "updatedAt": {
+          "type": "string",
+          "example": "2023-01-25 17:53:48.940 +00:00",
+          "description": "when user was updated"
+        },
+        "establishment": {
+          "$ref": "#/definitions/singleEstablishment"
+        }
+      }
+    },
+    "singleReviewWithUser": {
+      "type": "object",
+      "properties": {
+        "review_id": {
+          "type": "number",
+          "example": 117
+        },
+        "text": {
+          "type": "string",
+          "example": "Good place"
+        },
+        "check": {
+          "type": "number",
+          "example": 1500
+        },
+        "user_id": {
+          "type": "number",
+          "example": 23
+        },
+        "establishment_id": {
+          "type": "number",
+          "example": 119
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2023-01-25 17:53:48.940 +00:00",
+          "description": "when user was created"
+        },
+        "updatedAt": {
+          "type": "string",
+          "example": "2023-01-25 17:53:48.940 +00:00",
+          "description": "when user was updated"
+        },
+        "user": {
+          "$ref": "#/definitions/singleUser"
+        }
+      }
+    }
+  }
+}
+

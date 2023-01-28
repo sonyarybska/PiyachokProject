@@ -1,9 +1,10 @@
 import {useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
+import './MyReviewsPage.css';
 
 import {OneUserReview} from "./one-users-review/OneUserReview";
 
-import {fetchReviewsByUserId} from "../../services/review.service";
+import {deleteReview, fetchReviewsByUserId} from "../../services/review.service";
 
 export function MyReviewsPage() {
     const {state: {user_id}} = useLocation();
@@ -12,6 +13,7 @@ export function MyReviewsPage() {
     const [totalCount, setTotalCount] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [fetching, setFetching] = useState(true);
+    const [fetchingDelete, setFetchingDelete] = useState(false);
 
     useEffect(() => {
         if(fetching){
@@ -22,6 +24,16 @@ export function MyReviewsPage() {
             setCurrentPage(prevState => +prevState+1);
         }
     }, [fetching]);
+
+    useEffect(() => {
+        if(fetchingDelete){
+            fetchReviewsByUserId(user_id, null, 5).then(data =>  {
+                setUsersReviews([...data.reviews]);
+                setTotalCount(data.count);
+            }).finally(()=>setFetchingDelete('false'));
+            setCurrentPage(1);
+        }
+    }, [fetchingDelete]);
 
 
     const scrollHandler = (e) => {
@@ -37,10 +49,14 @@ export function MyReviewsPage() {
         }
     }, [totalCount]);
 
+    const deleteItem=(id)=>{
+        deleteReview(id).finally(()=>setFetchingDelete(true));
+    }
 
     return (
-        <div>
-            {usersReviews.map(value => <OneUserReview key={value.review_id} value={value}/>)}
+        <div className={'my-reviews-page'}>
+            {usersReviews.length?
+                usersReviews.map(value => <OneUserReview key={value.review_id} deleteItem={deleteItem} value={value}/>):'No reviews yet'}
         </div>
     )
 }

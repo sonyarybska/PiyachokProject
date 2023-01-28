@@ -9,7 +9,6 @@ const {
     putEstablishment,
     patchEstablishments,
     getEstablishmentsByUserId,
-    getEstablishmentsByTypeAndUserId
 } = require("../controllers/establishments.controller");
 
 const {isBodyValid, checkFiles} = require("../middlewares/establishments.middleware");
@@ -26,9 +25,9 @@ router.get('/type', getTypeEstablishments);
 router.get('/:id', getOneEstablishments);
 router.delete('/:id', deleteEstablishment);
 router.put('/:id', checkAccessToken, isBodyValid(updateEstablishmentValidator), checkFiles, putEstablishment);
-router.patch('/:id', checkAccessToken, patchEstablishments);
+router.patch('/:id',checkAccessToken,patchEstablishments);
 
 router.get('/users/:id', getEstablishmentsByUserId);
-router.get('/users/:id/:type', getEstablishmentsByTypeAndUserId);
+
 
 module.exports = router;

@@ -1,9 +1,10 @@
-import {GET_LOGIN_USER, GET_USERS, IS_AUTH_USER, SET_USER_NAME} from "../actions/actionTypes";
+import {GET_LOGIN_USER, GET_USERS, IS_AUTH_USER, SET_USER_NAME, IS_FORBIDDEN} from "../actions/actionTypes";
 
 let initialState = {
     users: [],
     user: '',
     isAuth: false,
+    isForbidden:false,
     username: ''
 }
 
@@ -17,6 +18,8 @@ export let userReducer = (state = initialState, action) => {
             return {...state, user: {...state.user, name: action.payload}};
         case IS_AUTH_USER:
             return {...state, isAuth: action.payload};
+        case IS_FORBIDDEN:
+            return {...state, isForbidden: action.payload};
         default:
             return {...state}
     }

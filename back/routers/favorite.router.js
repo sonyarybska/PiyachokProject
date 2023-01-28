@@ -4,11 +4,11 @@ const {deleteFavorite, addFavorite, getFavoriteByUserId, getFavorite} = require(
 const {checkFavoriteExist} = require("../middlewares/favorite.middleware");
 const {checkAccessToken} = require("../middlewares/auth.middleware");
 
-router.get('/', getFavorite);
+router.get('/', checkAccessToken, getFavorite);
 
-router.get('/:id', getFavoriteByUserId);
+router.get('/:id',checkAccessToken, getFavoriteByUserId);
 router.post('/:id', checkAccessToken, checkFavoriteExist, addFavorite);
 
-router.delete('/:user_id/:est_id', deleteFavorite);
+router.delete('/:user_id/:est_id',checkAccessToken, deleteFavorite);
 
 module.exports = router;

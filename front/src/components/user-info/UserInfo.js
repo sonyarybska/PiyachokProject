@@ -23,7 +23,7 @@ export function UserInfo() {
     const [userEstablishments, setUserEstablishments] = useState([]);
 
     const [fetching, setFetching] = useState(true);
-
+    const [fetchingDelete, setFetchingDelete] = useState(false);
     const [fetchingUser, setFetchingUser] = useState(true);
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -41,7 +41,13 @@ export function UserInfo() {
             }).finally(() => setFetching(false));
             setCurrentPage(prevState => +prevState + 1);
         }
-    }, [fetching, user_id]);
+        else if(fetchingDelete){
+            getEstablishmentsByUserId(user_id, null, null, true).then(value => {
+                setUserEstablishments([...value?.data?.establishments]);
+            }).finally(() => setFetchingDelete(false));
+            setCurrentPage(2);
+        }
+    }, [fetching,fetchingDelete, user_id]);
 
 
     useEffect(() => {
@@ -84,7 +90,7 @@ export function UserInfo() {
     }
 
     const deleteItem = (id) => {
-        deleteEstablishment(id).finally(() => setUserEstablishments(userEstablishments.filter(value => value.establishment_id !== id)));
+        deleteEstablishment(id).finally(() => setFetchingDelete(true));
     }
 
     return (<div className={'user-info-box'}>

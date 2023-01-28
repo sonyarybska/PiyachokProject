@@ -25,8 +25,6 @@ const createEstablishmentValidator = Joi.object({
 
     average_check: Joi.number(),
 
-    'photosName': Joi.array(),
-
     location: Joi.string()
         .trim()
         .min(3)
@@ -66,8 +64,6 @@ const updateEstablishmentValidator = Joi.object({
 
     average_check: Joi.number(),
 
-    photosName: Joi.array(),
-
     location: Joi.string()
         .trim()
         .min(3)
@@ -80,8 +76,6 @@ const updateEstablishmentValidator = Joi.object({
 
     user_id: Joi.number()
         .required(),
-
-    avatar: Joi.string(),
 
 });
 

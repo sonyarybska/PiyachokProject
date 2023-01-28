@@ -5,6 +5,7 @@ import {
     IS_AUTH_USER,
     SET_REVIEWS,
     SET_USER_NAME,
+    IS_FORBIDDEN
 } from "./actionTypes";
 
 
@@ -20,6 +21,10 @@ const setAuth = (data) => {
     return {type: IS_AUTH_USER, payload:data}
 }
 
+const setForbidden = (data) => {
+    return {type: IS_FORBIDDEN, payload:data}
+}
+
 const getOneEstablishments = (data) => {
     return {type: GET_ONE_ESTABLISHMENTS, payload: {...data}}
 }
@@ -33,4 +38,4 @@ const setReviews = (data) =>{
 }
 
 export {getUsers, getOneEstablishments, setUserName, getLoginUser, setAuth,
-  setReviews};
+  setReviews, setForbidden};

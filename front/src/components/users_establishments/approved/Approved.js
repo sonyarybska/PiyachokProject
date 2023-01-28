@@ -8,6 +8,8 @@ export function Approved() {
     const [establishments, setEstablishments] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
     const [fetching, setFetching] = useState(true);
+    const [fetchingDelete, setFetchingDelete] = useState(false);
+
     const [currentPage, setCurrentPage] = useState(1);
     const {user_id} = decode();
     const navigate = useNavigate();
@@ -18,16 +20,26 @@ export function Approved() {
 
     useEffect(() => {
         if (fetching) {
-            getEstablishmentsByUserId(user_id, currentPage, 5, true)
+            getEstablishmentsByUserId(user_id, currentPage, 8, true)
                 .then(value => {
                     setEstablishments([...establishments, ...value.data.establishments]);
                     setTotalCount(value.data.count)
                 })
-                .finally(() => setFetching(false));
+                .finally(() => setFetching('false'))
             setCurrentPage(prevState => +prevState + 1);
         }
     }, [fetching]);
 
+    useEffect(() => {
+        if (fetchingDelete) {
+            getEstablishmentsByUserId(user_id, null, 8, true)
+                .then(value => {
+                    setEstablishments([...value.data.establishments]);
+                    setTotalCount(value.data.count)
+                }).finally(() => setFetchingDelete('false'));
+        }
+    }, [fetchingDelete])
+    console.log(fetchingDelete);
     useEffect(() => {
         document.addEventListener('scroll', scrollHandler);
         return function () {
@@ -42,8 +54,7 @@ export function Approved() {
     }
 
     const deleteOneEstablishment = (id) => {
-        deleteEstablishment(id).finally(() =>
-            setEstablishments(establishments.filter(value => value.establishment_id !== id)));
+        deleteEstablishment(id).finally(() => setFetchingDelete(true));
     }
 
     return (

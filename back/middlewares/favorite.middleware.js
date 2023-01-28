@@ -6,6 +6,7 @@ module.exports = {
             const Favorite = db.getModel('Favorite');
 
             const {id} = req.params;
+
             const {establishment_id} = req.body;
 
             const favorite = await Favorite.findOne({where: {establishment_id, user_id: id}});
