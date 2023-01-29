@@ -39,7 +39,8 @@ export function Approved() {
                 }).finally(() => setFetchingDelete('false'));
         }
     }, [fetchingDelete])
-    console.log(fetchingDelete);
+
+
     useEffect(() => {
         document.addEventListener('scroll', scrollHandler);
         return function () {
@@ -61,7 +62,7 @@ export function Approved() {
         <div>
             {
                 establishments.map((value, index) => {
-                    return <div className={'div-est'}>
+                    return <div key={index} className={'div-est'}>
                         <div
                             onClick={() => navigate(`/adv/${value.title}`, {state: {establishment_id: value.establishment_id}})}
                             className={'img'} style={{

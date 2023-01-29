@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
-import {fetchNewsTypes} from "../../services/news.service";
 import './News.css';
+
+import {fetchNewsTypes} from "../../services/news.service";
 
 export function News() {
     const [news, setNews] = useState({text: '', type: '', photo: ''});
@@ -25,20 +26,20 @@ export function News() {
 
     return (
         <div>
-            <div>
+            {types.type_id && <div>
                 <p>Add news</p>
                 <form className={'create-news-form'} onSubmit={onSubmitNews} action="">
                     <input name={'text'} value={news.text} onChange={onChange} type="text"/>
                     <select name={'type'} value={news.type} onChange={onChange}>
                         {
-                            types.map(value => <option key={value.type_id} value={value.type}>{value.type}</option>)
+                            types.map(value => <option key={value?.type_id} value={value?.type}>{value?.type}</option>)
                         }
                     </select>
 
                     <input onChange={onChangeFile} type="file"/>
                     <button>Add</button>
                 </form>
-            </div>
+            </div>}
         </div>
     )
 }

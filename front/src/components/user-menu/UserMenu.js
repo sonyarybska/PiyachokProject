@@ -25,31 +25,31 @@ export function UserMenu({user, logoutResponse}) {
                                 <NavLink style={({ isActive }) => ({
                                     color: isActive ? 'white' : 'black',
                                     background: isActive ? 'black' : 'white',
-                                })} to={'/my-establishments'}>
+                                })} to={'my-establishments'}>
                                     <li>My establishments</li>
                                 </NavLink>
                                 <NavLink style={({ isActive }) => ({
                                     color: isActive ? 'white' : 'black',
                                     background: isActive ? 'black' : 'white',
-                                })}  to={'/admin-page'}>
+                                })}  to={'admin-page'}>
                                     {user?.admin && <li>Admin page</li>}
                                 </NavLink>
                                 <NavLink style={({ isActive }) => ({
                                     color: isActive ? 'white' : 'black',
                                     background: isActive ? 'black' : 'white',
-                                })}  to={'/my-reviews'} state={{user_id: user?.user_id}}>
+                                })}  to={'my-reviews'} state={{user_id: user?.user_id}}>
                                     {<li>My reviews</li>}
                                 </NavLink>
                                 <NavLink style={({ isActive }) => ({
                                     color: isActive ? 'white' : 'black',
                                     background: isActive ? 'black' : 'white',
-                                })}  to={'/settings'}>
+                                })}  to={'settings'}>
                                     {<li>Settings</li>}
                                 </NavLink>
                                 <NavLink style={({ isActive }) => ({
                                     color: isActive ? 'white' : 'black',
                                     background: isActive ? 'black' : 'white',
-                                })}  to={'/favorites'}>
+                                })}  to={'favorites'}>
                                     {<li>My favorites</li>}
                                 </NavLink>
                             </div>

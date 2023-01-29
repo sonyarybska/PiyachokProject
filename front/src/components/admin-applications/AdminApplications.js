@@ -1,7 +1,8 @@
 import {useEffect, useState} from "react";
 import './AdminAplications.css';
-import {AdminApplication} from "./admin-aplication/AdminAplication";
+
 import {fetchEstablishments, patchEstablishments} from "../../services/establishment.service";
+import {AdminApplication} from "./admin-aplication/AdminAplication";
 
 export function AdminApplications() {
     const [establishments, setEstablishments] = useState([]);
@@ -10,35 +11,25 @@ export function AdminApplications() {
     const [totalCount, setTotalCount] = useState(0);
     const [currenPage, setCurrentPage] = useState(1);
 
-
     useEffect(() => {
         if (fetching) {
             fetchEstablishments(currenPage, 5, null, null, null, null, null, true).then(value => {
-                console.log(value);
                 setEstablishments([...establishments, ...value.data.establishments]);
 
                 setTotalCount(value.data.count);
             })
                 .finally(() => setFetching(false));
             setCurrentPage(prevState => +prevState + 1);
-        }
-
-    }, [fetching]);
-
-
-
-    useEffect(() => {
-        if (fetchingDelete) {
-            console.log('skks');
+        } else if (fetchingDelete) {
             fetchEstablishments(1, 5, null, null, null, null, null, true).then(value => {
                 setEstablishments([...value.data.establishments]);
 
                 setTotalCount(value.data.count);
             })
-                .finally(() => setFetchingDelete('false'));
+                .finally(() => setFetchingDelete(false));
+            setCurrentPage(2);
         }
-
-    }, [fetchingDelete]);
+    }, [fetching, fetchingDelete]);
 
 
     useEffect(() => {
@@ -69,7 +60,8 @@ export function AdminApplications() {
     return (
         <div className={'aplications-box'}>
             {establishments.length ?
-                establishments.map(value => <AdminApplication item={value} updateState={updateState}/>) : 'No results'
+                establishments.map((value, index) => <AdminApplication key={index} item={value}
+                                                                       updateState={updateState}/>) : 'No results'
             }
         </div>
     )

@@ -1,16 +1,12 @@
-import {createRef, useEffect, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
+import {createRef, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import './UserInfo.css';
 
 import {deleteUser, fetchOneUser, updateUser} from "../../services/user.service";
 import {UserInfoEstablishments} from "./user-info-establishments/UserInfoEstablishments";
-import {
-    deleteEstablishment,
-    getEstablishmentsByUserId,
-} from "../../services/establishment.service";
+import {deleteEstablishment, getEstablishmentsByUserId,} from "../../services/establishment.service";
 import {setUserName} from "../../redux/actions/actions";
-
 
 export function UserInfo() {
     const {user} = useSelector(state => state.userReducer);
@@ -41,6 +37,7 @@ export function UserInfo() {
             }).finally(() => setFetching(false));
             setCurrentPage(prevState => +prevState + 1);
         }
+
         else if(fetchingDelete){
             getEstablishmentsByUserId(user_id, null, null, true).then(value => {
                 setUserEstablishments([...value?.data?.establishments]);

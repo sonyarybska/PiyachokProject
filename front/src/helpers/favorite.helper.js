@@ -1,6 +1,5 @@
 import {addUsersFavorite, deleteFavorite, fetchFavorite} from "../services/favorite.service";
 
-
 const addToFavorite = async (e, favoriteIcon, user_id, item) => {
     const color = favoriteIcon?.current?.style?.color === 'red';
 
@@ -16,8 +15,10 @@ const addToFavorite = async (e, favoriteIcon, user_id, item) => {
 
 async function changeFavorite(item, favoriteIcon) {
     const favorite = await fetchFavorite();
+
     if (favoriteIcon && favorite?.length) {
         favorite?.forEach(value => {
+
             if (value?.establishment_id === item?.establishment_id && favoriteIcon?.current) {
                 favoriteIcon.current.style.color = 'red';
             }

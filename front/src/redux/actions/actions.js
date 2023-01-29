@@ -3,7 +3,6 @@ import {
     GET_ONE_ESTABLISHMENTS,
     GET_LOGIN_USER,
     IS_AUTH_USER,
-    SET_REVIEWS,
     SET_USER_NAME,
     IS_FORBIDDEN
 } from "./actionTypes";
@@ -33,9 +32,5 @@ const setUserName = (name) => {
     return {type: SET_USER_NAME, payload: name}
 }
 
-const setReviews = (data) =>{
-    return {type:SET_REVIEWS, payload: [...data]}
-}
 
-export {getUsers, getOneEstablishments, setUserName, getLoginUser, setAuth,
-  setReviews, setForbidden};
+export {getUsers, getOneEstablishments, setUserName, getLoginUser, setAuth, setForbidden};

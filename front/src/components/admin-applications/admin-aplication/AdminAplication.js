@@ -2,7 +2,8 @@ import './AdminAplication.css'
 
 export function AdminApplication({item, updateState}) {
 
-    return (<div className={'aplication-item'}>
+    return (
+        <div className={'aplication-item'}>
         <div>
             <div style={{
                 background: `url(${'http://localhost:4000/' + item?.avatar?.replace(/\\/g, '/')}) center center / cover no-repeat`,

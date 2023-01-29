@@ -50,7 +50,7 @@ export function Rejected(){
         <div>
             {
                 establishments.map((value,index) => {
-                    return <div className={'div-est'}>
+                    return <div key={index} className={'div-est'}>
                         <div
                             onClick={() => navigate(`/adv/${value.title}`, {state: {establishment_id: value.establishment_id}})}
                             className={'img'} style={{

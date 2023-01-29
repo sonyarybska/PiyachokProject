@@ -1,6 +1,7 @@
-import {useEffect} from "react";
-import {fetchUsers} from "../../services/user.service";
 import {useDispatch, useSelector} from "react-redux";
+import {useEffect} from "react";
+
+import {fetchUsers} from "../../services/user.service";
 import {User} from "./user/User";
 import './Users.css';
 

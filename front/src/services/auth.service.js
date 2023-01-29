@@ -1,13 +1,11 @@
+import jwt_decode from "jwt-decode";
 
 import {getLoginUser, setAuth, setUserName} from "../redux/actions/actions";
-import jwt_decode from "jwt-decode";
 import {axiosInstance} from "./axios.service";
 
 const login = (tokenId) => {
     return async (dispatch) => {
         const response = await axiosInstance.post('/users', {tokenId});
-
-        console.log(response);
 
         localStorage.setItem('access_token', response.data.tokens.access_token);
 

@@ -22,6 +22,7 @@ const fetchEstablishments = async (page, limit, title, sort, type, filterByRatin
 
 const fetchOneEstablishment = async (id) => {
     const response = await axiosInstance.get(`/establishments/${id}`);
+
     return response;
 }
 

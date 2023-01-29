@@ -1,6 +1,8 @@
-import './Review.css';
-import ReactStars from 'react-stars'
 import {useSelector} from "react-redux";
+import ReactStars from 'react-stars';
+import './Review.css';
+
+
 
 export function Review({review, deleteItem}) {
     const {user: {user_id}} = useSelector(state => state.userReducer);
@@ -12,6 +14,7 @@ export function Review({review, deleteItem}) {
                 <h5>{review?.user?.name}</h5>
                 {review?.text}
             </div>
+
             {user_id === review.user_id && <div>
                 <button onClick={()=>deleteItem(review.review_id)}>Delete</button>
             </div>}

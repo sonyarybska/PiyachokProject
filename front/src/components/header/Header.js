@@ -1,20 +1,22 @@
-import './Header.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import {useDispatch, useSelector} from "react-redux";
 import {Link, useNavigate} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './Header.css';
 
 import {setAuth} from "../../redux/actions/actions";
 import {login, logout} from "../../services/auth.service";
 import {UserMenu} from "../user-menu/UserMenu";
 
 export function Header() {
+    const btn = JSON.parse(localStorage.getItem('button'));
+    const divRef = useRef(null);
+
     const {isAuth, user, isForbidden} = useSelector(state => state.userReducer);
 
     const [search_title, setSearch_title] = useState(false);
 
     const navigate = useNavigate();
-
     const dispatch = useDispatch();
 
     const onSubmit = async (e) => {
@@ -25,8 +27,6 @@ export function Header() {
     const onChange = (e) => {
         setSearch_title(e.target.value);
     }
-
-    const btn = JSON.parse(localStorage.getItem('button'));
 
     useEffect(() => {
         dispatch(setAuth(btn));
@@ -41,8 +41,6 @@ export function Header() {
         google.accounts.id.disableAutoSelect();
         await dispatch(logout(navigate));
     }
-
-    const divRef = useRef(null);
 
     useEffect(() => {
         /*global google*/
@@ -62,13 +60,12 @@ export function Header() {
     return (
         <div className={'header'}>
             <div className={'container'}>
-                <Link className={isForbidden?'disable_actions':''} to={'/'}>
+                <Link className={isForbidden?'disable_actions':''} to={""}>
                     <div className={'logo_title'}>
                         <div className={'title'}>Piyachok</div>
                         <img className={'logo'} src='/wine.png' alt=""/>
                     </div>
                 </Link>
-
 
                 <form className={"find_form"} onSubmit={onSubmit}>
                     <input className={isForbidden? 'disable_actions':''} onChange={onChange} type="text" placeholder="Искать здесь..."/>

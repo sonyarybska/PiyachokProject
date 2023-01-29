@@ -1,0 +1,7 @@
+.columns {
+    display: flex;
+    column-gap: 80px;
+    font-size: 20px;
+    color: #5e5d5d;
+    border-bottom: 1px solid darkgrey;
+}

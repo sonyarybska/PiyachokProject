@@ -1,38 +1,43 @@
 import {useEffect, useState} from "react";
-import ReactStars from 'react-stars'
-
-import './Reviews.css';
-import {deleteReview, fetchReviewsByEstablishmentId, postReview} from "../../services/review.service";
 import {useSelector} from "react-redux";
+import ReactStars from 'react-stars';
+import './Reviews.css';
+
+import {deleteReview, fetchReviewsByEstablishmentId, postReview} from "../../services/review.service";
+
 import {Review} from "./review/Review";
 import {useLocation} from "react-router-dom";
-import {AuthRequest} from "../auth-request/AuthRequest";
+import {AuthRequest} from "../../pages/index";
 
 export function Reviews({establishment_id}) {
-    const {state} = useLocation();
     const {user: {user_id}} = useSelector(state => state.userReducer);
+    const {state} = useLocation();
 
     const [reviews, setReviews] = useState([]);
     const [review, setReview] = useState({text: '', check: '', rating: 0});
+
     const [count, setCount] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
+
     const [fetchingPagination, setFetchingPagination] = useState(true);
     const [fetching, setFetching] = useState(false);
     const [fetchingDelete, setFetchingDelete] = useState(false);
 
     useEffect(() => {
-        if (fetchingPagination) {
-            fetchReviewsByEstablishmentId(+establishment_id, currentPage, 5, "created_at-DESC").then(value => {
+        if (fetchingPagination && establishment_id) {
+            fetchReviewsByEstablishmentId(establishment_id, currentPage, 5, "created_at-DESC").then(value => {
                 setReviews([...reviews, ...value?.data?.reviews]);
                 setCount(value?.data?.count);
             }).finally(() => setFetchingPagination(false));
             setCurrentPage(prevState => prevState + 1)
+
         } else if (fetching) {
             fetchReviewsByEstablishmentId(+establishment_id, null, 5, "created_at-DESC").then(value => {
                 setReviews([...value?.data?.reviews]);
                 setCount(value?.data?.count);
             }).finally(() => setFetching(false));
             setCurrentPage(2);
+
         } else if (fetchingDelete) {
             fetchReviewsByEstablishmentId(+establishment_id, null, 5, "created_at-DESC").then(value => {
                 setCount(value?.data?.count);
@@ -40,15 +45,13 @@ export function Reviews({establishment_id}) {
             }).finally(() => setFetchingDelete(false));
             setCurrentPage(2);
         }
-    }, [fetchingPagination, fetching, fetchingDelete]);
+    }, [fetchingPagination, fetching, fetchingDelete, establishment_id]);
 
     const scrollHandler = (e) => {
         if (e?.target?.documentElement?.scrollHeight - (e?.target?.documentElement?.scrollTop + window?.innerHeight) < 150 && reviews?.length < count) {
             setFetchingPagination(true);
-            console.log('sksk')
         }
     }
-
 
     useEffect(() => {
         document.addEventListener('scroll', scrollHandler);
@@ -72,7 +75,7 @@ export function Reviews({establishment_id}) {
     }
 
     const deleteItem = (id) => {
-        deleteReview(id).finally(()=>setFetchingDelete(true));
+        deleteReview(id).finally(() => setFetchingDelete(true));
     }
 
     return (
