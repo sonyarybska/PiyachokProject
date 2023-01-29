@@ -43,7 +43,7 @@ function App() {
                 <Route path={'auth'} element={<AuthRequest/>}/>
                 </Route>
                 <Route path={'/adv/:title/previewSlider'} element={<PreviewSlider/>}/>
-                <Route path={'*'} element={<div>nor</div>}/>
+                <Route path={'*'} element={<div>Not found</div>}/>
             </Routes>
         </div> : <ConfirmationPage setAge={setAge}/>}
     </Router>);
