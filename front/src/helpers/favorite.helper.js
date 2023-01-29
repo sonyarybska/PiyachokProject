@@ -16,8 +16,8 @@ const addToFavorite = async (e, favoriteIcon, user_id, item) => {
 
 async function changeFavorite(item, favoriteIcon) {
     const favorite = await fetchFavorite();
-    if (favoriteIcon) {
-        favorite.forEach(value => {
+    if (favoriteIcon && favorite?.length) {
+        favorite?.forEach(value => {
             if (value?.establishment_id === item?.establishment_id && favoriteIcon?.current) {
                 favoriteIcon.current.style.color = 'red';
             }

@@ -22,27 +22,30 @@ export function Reviews({establishment_id}) {
 
     useEffect(() => {
         if (fetchingPagination) {
-            fetchReviewsByEstablishmentId(establishment_id, currentPage, 5, "created_at-DESC").then(value => {
-                setReviews([...reviews, ...value.data.reviews]);
-                setCount(value.data.count)
+            fetchReviewsByEstablishmentId(+establishment_id, currentPage, 5, "created_at-DESC").then(value => {
+                setReviews([...reviews, ...value?.data?.reviews]);
+                setCount(value?.data?.count);
             }).finally(() => setFetchingPagination(false));
             setCurrentPage(prevState => prevState + 1)
         } else if (fetching) {
-            fetchReviewsByEstablishmentId(establishment_id, null, 5, "created_at-DESC").then(value => {
-                setReviews([...value.data.reviews]);
+            fetchReviewsByEstablishmentId(+establishment_id, null, 5, "created_at-DESC").then(value => {
+                setReviews([...value?.data?.reviews]);
+                setCount(value?.data?.count);
             }).finally(() => setFetching(false));
             setCurrentPage(2);
         } else if (fetchingDelete) {
-            fetchReviewsByEstablishmentId(establishment_id, null, 5, "created_at-DESC").then(value => {
-                setReviews([...value.data.reviews]);
+            fetchReviewsByEstablishmentId(+establishment_id, null, 5, "created_at-DESC").then(value => {
+                setCount(value?.data?.count);
+                setReviews([...value?.data?.reviews]);
             }).finally(() => setFetchingDelete(false));
             setCurrentPage(2);
         }
     }, [fetchingPagination, fetching, fetchingDelete]);
 
     const scrollHandler = (e) => {
-        if (e?.target?.documentElement?.scrollHeight - (e?.target?.documentElement?.scrollTop + window?.innerHeight) < 100 && reviews?.length < count) {
+        if (e?.target?.documentElement?.scrollHeight - (e?.target?.documentElement?.scrollTop + window?.innerHeight) < 150 && reviews?.length < count) {
             setFetchingPagination(true);
+            console.log('sksk')
         }
     }
 
