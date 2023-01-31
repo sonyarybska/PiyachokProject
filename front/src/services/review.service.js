@@ -1,6 +1,5 @@
 import {axiosInstance} from "./axios.service";
 
-
 const fetchReviewsByEstablishmentId = async (id, page, limit, sort) => {
     const response = await axiosInstance.get(`/reviews/${id}`, {params: {page, limit, sort}});
 

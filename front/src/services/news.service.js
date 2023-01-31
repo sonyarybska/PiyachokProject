@@ -1,5 +1,7 @@
 import {axiosInstance} from "./axios.service";
 
+
+//це просто поки заглушка,ще не починала роботу над новинами
 const fetchNews = async (id) => {
     const response = await axiosInstance.get(`/news`);
 

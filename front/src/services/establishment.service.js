@@ -1,6 +1,5 @@
 import {axiosInstance} from "./axios.service";
 
-
 const fetchEstablishments = async (page, limit, title, sort, type, filterByRating, filterByCheck,pending,approved,rejected) => {
     const response = await axiosInstance.get(`/establishments`, {
         params: {
@@ -34,7 +33,7 @@ const postEstablishments = async (data) => {
 
 const putEstablishments = async (data, id) => {
     const response = await axiosInstance.put(`/establishments/${id}`, data).catch(err => err.response);
-    console.log(response);
+
     return response.data.message ? alert(response.data.message) : response;
 };
 

@@ -1,6 +1,5 @@
 import {axiosInstance} from "./axios.service";
 
-
 const fetchFavorite = async () => {
     const response = await axiosInstance.get(`/favorite`);
 

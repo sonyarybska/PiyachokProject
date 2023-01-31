@@ -1,3 +1,4 @@
+//це просто поки заглушка,ще не починала роботу над новинами
 const router = require('express').Router();
 
 const {getNews, createNews, getNewsByEstablishmentId, getNewsTypes} = require('./../controllers/news.conroller');
