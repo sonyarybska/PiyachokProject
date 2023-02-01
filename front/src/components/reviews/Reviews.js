@@ -7,7 +7,7 @@ import {deleteReview, fetchReviewsByEstablishmentId, postReview} from "../../ser
 
 import {Review} from "./review/Review";
 import {useLocation} from "react-router-dom";
-import {AuthRequest} from "../../pages/index";
+import {Login} from "../../pages/index";
 
 export function Reviews({establishment_id}) {
     const {user: {user_id}} = useSelector(state => state.userReducer);
@@ -81,7 +81,7 @@ export function Reviews({establishment_id}) {
     return (
         <div className={'reviews-box'}>
             {
-                state?.loginRequest && <AuthRequest/>
+                state?.loginRequest && <Login/>
             }
 
             <div>

@@ -6,7 +6,6 @@ import './EstablishmentInfo.css';
 import {fetchOneEstablishment} from "../../services/establishment.service";
 import {addToFavorite, changeFavorite} from "../../helpers/favorite.helper";
 import {getOneEstablishments} from "../../redux/actions/actions";
-import {AuthRequest} from "../auth-request/AuthRequest";
 import {News, Reviews} from "../../components/index";
 
 
@@ -53,10 +52,10 @@ export function EstablishmentInfo() {
     }
 
     useEffect(() => {
-        if (isAuth) {
+        if (isAuth && favoriteIcon.current) {
             changeFavorite(one_establishment, favoriteIcon);
             setFavorite(false);
-        } else {
+        } else if (favoriteIcon.current) {
             favoriteIcon.current.style = 'black';
         }
     }, [favorite, favoriteIcon, isAuth, one_establishment]);
@@ -99,10 +98,6 @@ export function EstablishmentInfo() {
                 <p>News</p>
                 {one_establishment?.user_id === user_id ? <News/> : ''}
             </div>
-            {
-                isForbidden && <AuthRequest/>
-            }
-
             <Routes>
                 <Route path={'/'} element={<Reviews establishment_id={one_establishment?.establishment_id}/>}/>
             </Routes>

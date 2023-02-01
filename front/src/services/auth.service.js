@@ -20,7 +20,7 @@ const login = (tokenId) => {
 };
 
 
-const logout = (navigate) => {
+const logout = () => {
     try {
         return async (dispatch) => {
 
@@ -28,11 +28,9 @@ const logout = (navigate) => {
 
             localStorage.removeItem('access_token');
 
-            navigate('/');
-
             dispatch(getLoginUser({}));
 
-            return  await axiosInstance.post('/auth/logout', {withCredentials: true});
+            return await axiosInstance.post('/auth/logout', {withCredentials: true});
         }
     } catch (e) {
         console.log(e);

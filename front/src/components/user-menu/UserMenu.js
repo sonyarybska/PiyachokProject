@@ -14,7 +14,7 @@ export function UserMenu({user, logoutResponse}) {
                                 <div className={'profile_info'}>
                                     <img alt={'avatar'} src={user?.picture}/>
                                     <div>
-                                        <div id={'name'}>{user.name}</div>
+                                        <div id={'name'}>{user?.name}</div>
                                         <div id={'email'}>{user?.email}</div>
                                     </div>
                                 </div>

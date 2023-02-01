@@ -3,11 +3,11 @@ import {addUsersFavorite, deleteFavorite, fetchFavorite} from "../services/favor
 const addToFavorite = async (e, favoriteIcon, user_id, item) => {
     const color = favoriteIcon?.current?.style?.color === 'red';
 
-    if (color && favoriteIcon) {
+    if (color && favoriteIcon && e.target) {
         e.target.style = 'black';
         await deleteFavorite(user_id, item?.establishment_id);
 
-    } else if (!color && favoriteIcon) {
+    } else if (!color && favoriteIcon.current && e.target) {
         e.target.style = 'red';
         await addUsersFavorite(user_id, item?.establishment_id);
     }
@@ -16,7 +16,7 @@ const addToFavorite = async (e, favoriteIcon, user_id, item) => {
 async function changeFavorite(item, favoriteIcon) {
     const favorite = await fetchFavorite();
 
-    if (favoriteIcon && favorite?.length) {
+    if (favoriteIcon.current && favorite?.length) {
         favorite?.forEach(value => {
 
             if (value?.establishment_id === item?.establishment_id && favoriteIcon?.current) {

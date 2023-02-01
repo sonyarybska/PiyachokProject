@@ -1,20 +1,22 @@
 import {useEffect, useRef} from "react";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
-import './AuthRequest.css';
+import './Login.css';
 
 import {login} from "../../services/auth.service";
 import {setForbidden} from "../../redux/actions/actions";
 
-export function AuthRequest() {
+export function Login() {
     const {state} = useLocation()
     const dispatch = useDispatch();
-
+    const navigate = useNavigate()
     const divRef = useRef(null);
 
     const handleCallbackResponse = (res) => {
-        dispatch(login(res.credential));
-        dispatch(setForbidden(false));
+         dispatch(login(res.credential)).finally(()=>{
+             dispatch(setForbidden(false));
+             navigate(state?.pathname, {replace: true})
+         });
     };
 
     useEffect(() => {
@@ -30,11 +32,11 @@ export function AuthRequest() {
             )
         }
 
-    }, [state?.loginRequest, divRef?.current]);
-    
+    }, [divRef?.current]);
+
     return (
         <div className={'login-box'}>
-            <button onClick={()=>dispatch(setForbidden(false))}>Close</button>
+            <button onClick={()=> navigate("/")}>Close</button>
             <p>Please login to your account to continue</p>
             <div className={'login-button'} ref={divRef}></div>
         </div>

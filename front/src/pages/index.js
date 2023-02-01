@@ -1,5 +1,5 @@
 import {AdminMenu} from "./admin-menu/AdminMenu";
-import {AuthRequest} from "./auth-request/AuthRequest";
+import {Login} from "./login/Login";
 import {ConfirmationPage} from "./confirmation-page/ConfirmationPage";
 import {CrudEstablishmentsPage} from "./crud-establishments-page/CrudEstablishmentsPage";
 import {EstablishmentInfo} from "./establishment-info/EstablishmentInfo";
@@ -12,7 +12,7 @@ import {PreviewSlider} from "./preview-slider/PreviewSlider";
 
 export {
    AdminMenu,
-    AuthRequest,
+    Login,
     ConfirmationPage,
     CrudEstablishmentsPage,
     EstablishmentInfo,

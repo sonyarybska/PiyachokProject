@@ -5,7 +5,7 @@ import './Establishments.css';
 
 import {fetchEstablishments, getTypeEstablishments} from "../../services/establishment.service";
 import {Establishment} from "./establishment/Establishment";
-import {AuthRequest} from "../auth-request/AuthRequest";
+import {Login} from "../login/Login";
 
 export function Establishments({admin}) {
     const {isForbidden} = useSelector(state => state.userReducer);
@@ -87,7 +87,7 @@ export function Establishments({admin}) {
         if (e.target.value.length) {
             fetchEstablishments(null, 8, state?.title, e.target.value, currentType, filterByRating).then(value => setEstablishments([...value?.data?.establishments]));
         } else {
-            fetchEstablishments(null, 8, state?.title, null, currentType, filterByRating, null, null, null, true).then(value => setEstablishments([...value?.data?.establishments]));
+            fetchEstablishments(null, 8, state?.title, null, currentType, filterByRating, null, null, true, false).then(value => setEstablishments([...value?.data?.establishments]));
             setSortType(null);
         }
     }
@@ -214,7 +214,7 @@ export function Establishments({admin}) {
                 <div>No result</div>}
         </div>
         {
-            isForbidden && <AuthRequest/>
+            isForbidden && <Login/>
         }
     </div>)
 }

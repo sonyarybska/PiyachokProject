@@ -11,8 +11,8 @@ const {checkAccessToken} = require("../middlewares/auth.middleware");
 
 router.post('/',checkAccessToken, postReview);
 
-router.get('/:id', getReviewsByEstablishmentId);
-router.delete('/:id', deleteReview);
+router.get('/:id',checkAccessToken, getReviewsByEstablishmentId);
+router.delete('/:id',checkAccessToken, deleteReview);
 
 router.get('/:id/rating', getAverageRatingById);
 

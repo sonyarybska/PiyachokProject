@@ -4,12 +4,14 @@ import {useDispatch} from "react-redux";
 import './App.css';
 
 
-import { AdminMenu, AuthRequest, ConfirmationPage, CrudEstablishmentsPage, EstablishmentInfo, Establishments, Favorites,
+import {
+    AdminMenu, Login, ConfirmationPage, CrudEstablishmentsPage, EstablishmentInfo, Establishments, Favorites,
     MyReviewsPage, ResponseInterceptor, Settings, PreviewSlider
 } from "./pages/index";
 
 import {checkAuth} from "./services/auth.service";
 import {MainLayout} from "./layots/index";
+import {AuthRequest} from "./hoc/AuthRequest";
 
 function App() {
     const dispatch = useDispatch();
@@ -32,15 +34,25 @@ function App() {
         {age ? <div className="App">
             <ResponseInterceptor/>
             <Routes>
-                <Route  path={"/"} element={<MainLayout/>}>
+                <Route path={"/"} element={<MainLayout/>}>
                     <Route index element={<Establishments/>}/>
-                <Route path={'my-establishments/*'} element={<CrudEstablishmentsPage/>}/>
-                <Route path={'admin-page/*'} element={<AdminMenu/>}/>
-                <Route path={'settings'} element={<Settings/>}/>
-                <Route path={'favorites'} element={<Favorites/>}/>
-                <Route path={'my-reviews'} element={<MyReviewsPage/>}/>
-                <Route path={'adv/:title/*'} element={<EstablishmentInfo/>}/>
-                <Route path={'auth'} element={<AuthRequest/>}/>
+                    <Route path={'my-establishments/*'} element={<AuthRequest>
+                        <CrudEstablishmentsPage/>
+                    </AuthRequest>}/>
+                    <Route path={'admin-page/*'} element={<AuthRequest>
+                        <AdminMenu/>
+                    </AuthRequest>}/>
+                    <Route path={'settings'} element={<AuthRequest>
+                        <Settings/>
+                    </AuthRequest>}/>
+                    <Route path={'favorites'} element={<AuthRequest>
+                        <Favorites/>
+                    </AuthRequest>}/>
+                    <Route path={'my-reviews'} element={<AuthRequest>
+                        <MyReviewsPage/>
+                    </AuthRequest>}/>
+                    <Route path={'adv/:title/*'} element={<EstablishmentInfo/>}/>
+                    <Route path={'auth'} element={<Login/>}/>
                 </Route>
                 <Route path={'/adv/:title/previewSlider'} element={<PreviewSlider/>}/>
                 <Route path={'*'} element={<div>Not found</div>}/>
