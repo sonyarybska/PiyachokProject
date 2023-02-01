@@ -39,14 +39,12 @@ export function Establishments({admin}) {
     }, [fetching]);
 
     useEffect(() => {
-        if (state?.title){
-            if (state?.title?.length) {
+            if (state.title) {
                 fetchEstablishments(null, 6, state?.title).then(value => setEstablishments([...value.data.establishments]));
-            } else if (!state.title) {
+            } else {
                 fetchEstablishments(null,null,null,null,null,null,null,null,true).then(value => setEstablishments([...value.data.establishments])).finally(() => setFetchingEstablishments(false));
             }
-        }
-    }, [state?.title]);
+    }, [state?.title,fetchingEstablishments]);
 
     const scrollHandler = (e) => {
         if (e?.target?.documentElement?.scrollHeight - (e?.target?.documentElement?.scrollTop + window?.innerHeight) < 100 && establishments?.length < totalCount) {
