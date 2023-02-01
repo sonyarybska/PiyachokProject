@@ -1,6 +1,6 @@
 import jwt_decode from "jwt-decode";
 
-import {getLoginUser, setAuth, setUserName} from "../redux/actions/actions";
+import {getLoginUser, setAuth, setForbidden, setUserName} from "../redux/actions/actions";
 import {axiosInstance} from "./axios.service";
 
 const login = (tokenId) => {
@@ -29,6 +29,7 @@ const logout = () => {
             localStorage.removeItem('access_token');
 
             dispatch(getLoginUser({}));
+            dispatch(setForbidden(true));
 
             return await axiosInstance.post('/auth/logout', {withCredentials: true});
         }

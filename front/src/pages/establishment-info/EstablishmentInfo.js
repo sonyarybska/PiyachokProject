@@ -12,7 +12,7 @@ import {News, Reviews} from "../../components/index";
 export function EstablishmentInfo() {
     const {one_establishment} = useSelector(state => state.establishmentReducer);
 
-    const {user: {user_id}, isAuth, isForbidden} = useSelector(state => state.userReducer);
+    const {user: {user_id}, isAuth} = useSelector(state => state.userReducer);
 
     const dispatch = useDispatch();
     const {state} = useLocation();
@@ -66,10 +66,10 @@ export function EstablishmentInfo() {
                 <h1>{one_establishment.title}</h1>
                 {
                     <div className={'slider'}>
-                        <button disabled={!!isForbidden} onClick={prevImage}>{'<'}</button>
+                        <button onClick={prevImage}>{'<'}</button>
 
                         <div className={`slide`}>
-                            <Link style={{pointerEvents: isForbidden ? "none" : ''}} to={`previewSlider?index=${image}`}
+                            <Link to={`previewSlider?index=${image}`}
                                   state={{title: one_establishment.title}}>
                                 <div className={`image`} style={{
                                     background: `url(${'http://localhost:4000/' + one_establishment?.photos?.[image]?.replace(/\\/g, '/')}) center center / cover no-repeat`,
@@ -90,7 +90,7 @@ export function EstablishmentInfo() {
                             <i onClick={(e) => addToFavoriteList(e)} ref={favoriteIcon} className="fa fa-heart"
                                style={{fontSize: "34", color: 'black'}}></i>
                         </div>
-                        <button disabled={!!isForbidden} onClick={nextImage}>{'>'}</button>
+                        <button onClick={nextImage}>{'>'}</button>
                     </div>
                 }
             </div>}

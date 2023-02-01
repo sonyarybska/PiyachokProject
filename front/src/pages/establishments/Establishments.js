@@ -5,7 +5,6 @@ import './Establishments.css';
 
 import {fetchEstablishments, getTypeEstablishments} from "../../services/establishment.service";
 import {Establishment} from "./establishment/Establishment";
-import {Login} from "../login/Login";
 
 export function Establishments({admin}) {
     const {isForbidden} = useSelector(state => state.userReducer);
@@ -156,7 +155,7 @@ export function Establishments({admin}) {
         {!admin && <div className={'filter-box'}>
             <div className={'filter-item'}>
                 <p>Sort by</p>
-                <select className={isForbidden ? 'disable_filter' : ''} onChange={onChangeSort}>
+                <select  onChange={onChangeSort}>
                     <option value={''}>Without sort</option>
                     <option value="average_check-DESC">Sort by average check (descending)</option>
                     <option value="average_check-ASC">Sort by average check (ascending)</option>
@@ -171,7 +170,7 @@ export function Establishments({admin}) {
 
             <div className={'filter-item'}>
                 <p>Type of establishment</p>
-                <select className={isForbidden ? 'disable_filter' : ''} onChange={onChangeType} name="" id="">
+                <select  onChange={onChangeType} name="" id="">
                     <option value={''}>Any type</option>
                     {types.map((value, index) => <option key={index} value={value.title}>{value.title}</option>)}
                 </select>
@@ -180,8 +179,8 @@ export function Establishments({admin}) {
             <div className={'filter-item'}>
                 <p>Rating</p>
                 <form className={'between-form'} onSubmit={onSubmitFilterRating} name={'rating'} action="">
-                    <input className={isForbidden ? 'disable_filter' : ''} type="number"/>
-                    <input className={isForbidden ? 'disable_filter' : ''} type="number"/>
+                    <input  type="number"/>
+                    <input  type="number"/>
                     <button> filter</button>
                 </form>
             </div>
@@ -189,8 +188,8 @@ export function Establishments({admin}) {
             <div className={'filter-item'}>
                 <p>Average check</p>
                 <form className={'between-form'} onSubmit={onSubmitFilterCheck} name={'average_check'} action="">
-                    <input className={isForbidden ? 'disable_filter' : ''} type="number"/>
-                    <input className={isForbidden ? 'disable_filter' : ''} type="number"/>
+                    <input  type="number"/>
+                    <input  type="number"/>
                     <button>filter</button>
                 </form>
             </div>
@@ -213,8 +212,5 @@ export function Establishments({admin}) {
                 }) :
                 <div>No result</div>}
         </div>
-        {
-            isForbidden && <Login/>
-        }
     </div>)
 }

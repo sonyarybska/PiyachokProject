@@ -7,11 +7,9 @@ import {deleteReview, fetchReviewsByEstablishmentId, postReview} from "../../ser
 
 import {Review} from "./review/Review";
 import {useLocation} from "react-router-dom";
-import {Login} from "../../pages/index";
 
 export function Reviews({establishment_id}) {
     const {user: {user_id}} = useSelector(state => state.userReducer);
-    const {state} = useLocation();
 
     const [reviews, setReviews] = useState([]);
     const [review, setReview] = useState({text: '', check: '', rating: 0});
@@ -80,22 +78,18 @@ export function Reviews({establishment_id}) {
 
     return (
         <div className={'reviews-box'}>
-            {
-                state?.loginRequest && <Login/>
-            }
-
             <div>
                 Reviews about establishments
             </div>
-            <ReactStars className={state?.loginRequest ? 'disable_actions' : ''} count={5} value={review?.rating}
+            <ReactStars count={5} value={review?.rating}
                         onChange={onChangeRating}/>
             <form className={'input-form'} onSubmit={createReview} action="">
-                <input onChange={onChange} className={state?.loginRequest ? 'disable_actions' : ''} name={'text'}
+                <input onChange={onChange} name={'text'}
                        value={review.text} type="text"/>
-                <input onChange={onChange} className={state?.loginRequest ? 'disable_actions' : ''} name={'check'}
+                <input onChange={onChange} name={'check'}
                        value={review.check} type="number"/>
 
-                <button className={state?.loginRequest ? 'disable_actions' : ''}>Send</button>
+                <button>Send</button>
             </form>
 
             {

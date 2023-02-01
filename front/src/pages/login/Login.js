@@ -7,7 +7,6 @@ import {login} from "../../services/auth.service";
 import {setForbidden} from "../../redux/actions/actions";
 
 export function Login() {
-    const {state} = useLocation()
     const dispatch = useDispatch();
     const navigate = useNavigate()
     const divRef = useRef(null);
@@ -15,8 +14,8 @@ export function Login() {
     const handleCallbackResponse = (res) => {
          dispatch(login(res.credential)).finally(()=>{
              dispatch(setForbidden(false));
-             navigate(state?.pathname, {replace: true})
          });
+         return navigate("/", {replace: true})
     };
 
     useEffect(() => {
@@ -36,7 +35,9 @@ export function Login() {
 
     return (
         <div className={'login-box'}>
-            <button onClick={()=> navigate("/")}>Close</button>
+            <button onClick={()=> {
+                dispatch(setForbidden(false))
+                return navigate("/")}}>Close</button>
             <p>Please login to your account to continue</p>
             <div className={'login-button'} ref={divRef}></div>
         </div>

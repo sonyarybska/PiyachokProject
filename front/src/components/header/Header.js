@@ -12,7 +12,7 @@ export function Header() {
     const btn = JSON.parse(localStorage.getItem('button'));
     const divRef = useRef(null);
 
-    const {isAuth, user, isForbidden} = useSelector(state => state.userReducer);
+    const {isAuth, user} = useSelector(state => state.userReducer);
 
     const [search_title, setSearch_title] = useState(false);
 
@@ -60,7 +60,7 @@ export function Header() {
     return (
         <div className={'header'}>
             <div className={'container'}>
-                <Link className={isForbidden?'disable_actions':''} to={""}>
+                <Link to={""}>
                     <div className={'logo_title'}>
                         <div className={'title'}>Piyachok</div>
                         <img className={'logo'} src='/wine.png' alt=""/>
@@ -68,10 +68,10 @@ export function Header() {
                 </Link>
 
                 <form className={"find_form"} onSubmit={onSubmit}>
-                    <input className={isForbidden? 'disable_actions':''} onChange={onChange} type="text" placeholder="Искать здесь..."/>
+                    <input onChange={onChange} type="text" placeholder="Искать здесь..."/>
                 </form>
 
-                {!isAuth && <div className={isForbidden?'disable_actions':''} ref={divRef}></div>}
+                {!isAuth && <div ref={divRef}></div>}
 
                 {isAuth && <UserMenu user={user} logoutResponse={logoutResponse}/>}
 

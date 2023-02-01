@@ -4,10 +4,11 @@ import {useDispatch} from "react-redux";
 
 import {axiosInstance} from "../../services/axios.service";
 import {setForbidden} from "../../redux/actions/actions";
+import {useNavigate} from "react-router-dom";
 
 export function ResponseInterceptor() {
     const dispatch = useDispatch();
-
+    const navigate = useNavigate()
     const interceptorId = useRef(null);
 
     useEffect(() => {
@@ -28,6 +29,7 @@ export function ResponseInterceptor() {
                 }
             } else if (error?.response?.status === 403) {
                 dispatch(setForbidden(true));
+                navigate('/auth');
                 return true;
             }
             throw error;
