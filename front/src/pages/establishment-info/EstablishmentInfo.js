@@ -17,6 +17,7 @@ export function EstablishmentInfo() {
     const dispatch = useDispatch();
     const {state} = useLocation();
 
+
     let [image, setImage] = useState(state?.image === undefined ? 0 : state?.image);
 
     const [favorite, setFavorite] = useState(false);

@@ -38,16 +38,15 @@ export function Establishments({admin}) {
         }
     }, [fetching]);
 
-
     useEffect(() => {
         if (state?.title){
-            if (state?.length) {
+            if (state?.title?.length) {
                 fetchEstablishments(null, 6, state?.title).then(value => setEstablishments([...value.data.establishments]));
-            } else if (!state?.length) {
-                fetchEstablishments().then(value => setEstablishments([...value.data.establishments])).finally(() => setFetchingEstablishments(false));
+            } else if (!state.title) {
+                fetchEstablishments(null,null,null,null,null,null,null,null,true).then(value => setEstablishments([...value.data.establishments])).finally(() => setFetchingEstablishments(false));
             }
         }
-    }, [state, fetchingEstablishments]);
+    }, [state?.title]);
 
     const scrollHandler = (e) => {
         if (e?.target?.documentElement?.scrollHeight - (e?.target?.documentElement?.scrollTop + window?.innerHeight) < 100 && establishments?.length < totalCount) {

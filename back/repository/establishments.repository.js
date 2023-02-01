@@ -8,7 +8,7 @@ module.exports = {
         try {
             const Establishment = db.getModel('Establishment');
             const Review = db.getModel('Review');
-
+            console.log(query);
             const {
                 limit = 12,
                 page = 1,
