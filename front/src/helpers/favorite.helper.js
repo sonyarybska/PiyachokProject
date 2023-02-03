@@ -13,13 +13,13 @@ const addToFavorite = async (e, favoriteIcon, user_id, item) => {
     }
 }
 
-async function changeFavorite(item, favoriteIcon) {
+async function changeFavorite(item, favoriteIcon, user_id) {
     const favorite = await fetchFavorite();
 
-    if (favoriteIcon.current && favorite?.length) {
+    if (favoriteIcon.current && favorite?.length && user_id) {
         favorite?.forEach(value => {
 
-            if (value?.establishment_id === item?.establishment_id && favoriteIcon?.current) {
+            if (value?.establishment_id === item?.establishment_id && value?.user_id === user_id && favoriteIcon?.current) {
                 favoriteIcon.current.style.color = 'red';
             }
         })

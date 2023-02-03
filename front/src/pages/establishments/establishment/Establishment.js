@@ -32,12 +32,12 @@ export function Establishment({item, sortFunction, loginRequest}) {
 
     useEffect(() => {
         if (isAuth) {
-            changeFavorite(item, favoriteIcon);
+            changeFavorite(item, favoriteIcon, user_id);
             setFavorite(false);
         } else if (favoriteIcon.current) {
             favoriteIcon.current.style = 'black';
         }
-    }, [favoriteIcon, isAuth, item, favorite]);
+    }, [favoriteIcon, isAuth, item, favorite, user_id]);
 
     return (
         <div>
