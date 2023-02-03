@@ -39,7 +39,7 @@ export function Establishments({admin}) {
     }, [fetching]);
 
     useEffect(() => {
-            if (state.title) {
+            if (state?.title) {
                 fetchEstablishments(null, 6, state?.title).then(value => setEstablishments([...value.data.establishments]));
             } else {
                 fetchEstablishments(null,null,null,null,null,null,null,null,true).then(value => setEstablishments([...value.data.establishments])).finally(() => setFetchingEstablishments(false));
