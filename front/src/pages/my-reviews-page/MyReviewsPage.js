@@ -19,11 +19,12 @@ export function MyReviewsPage() {
     useEffect(() => {
         if (fetching) {
             fetchReviewsByUserId(user_id, currentPage, 5).then(data => {
-                console.log(user_id);
                 setUsersReviews([...usersReviews, ...data.reviews]);
                 setTotalCount(data.count);
             }).finally(() => setFetching(false));
+
             setCurrentPage(prevState => +prevState + 1);
+
         } else if (fetchingDelete) {
             fetchReviewsByUserId(user_id, null, 5).then(data => {
                 setUsersReviews([...data.reviews]);

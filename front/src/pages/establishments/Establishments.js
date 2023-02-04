@@ -27,6 +27,8 @@ export function Establishments({admin}) {
     const {state} = useLocation();
 
     useEffect(() => {
+        let cancel = false;
+
         if (fetching) {
             fetchEstablishments(currenPage, 8, state?.title, sortType, currentType, filterByRating, filterByCheck).then(value => {
                 setEstablishments([...establishments, ...value.data.establishments]);
@@ -35,6 +37,10 @@ export function Establishments({admin}) {
             })
                 .finally(() => setFetching(false));
             setCurrentPage(prevState => +prevState + 1);
+        }
+
+        return () => {
+            cancel = true;
         }
     }, [fetching]);
 

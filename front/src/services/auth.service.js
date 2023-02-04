@@ -13,7 +13,9 @@ const login = (tokenId) => {
 
         dispatch(getLoginUser(response.data.user));
 
-        dispatch(setUserName(response.data.user.name))
+        dispatch(setUserName(response.data.user.name));
+
+        dispatch(setForbidden(false));
 
         return response.data
     }
@@ -29,6 +31,7 @@ const logout = () => {
             localStorage.removeItem('access_token');
 
             dispatch(getLoginUser({}));
+
             dispatch(setForbidden(true));
 
             return await axiosInstance.post('/auth/logout', {withCredentials: true});
