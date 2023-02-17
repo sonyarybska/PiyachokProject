@@ -1,6 +1,6 @@
 import {usePlacesWidget} from "react-google-autocomplete";
 import {createRef, useEffect, useState} from "react";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import './CreateFormEsrablishments.css';
 
 import {getTypeEstablishments, postEstablishments, putEstablishments} from "../../services/establishment.service";
@@ -10,6 +10,7 @@ import {Reorder} from "framer-motion";
 
 export function CreateFormEstablishments() {
     const {state, pathname} = useLocation();
+    const navigate = useNavigate();
     const currentPath = pathname?.split('/').pop();
 
     const inputFileRef = createRef();
@@ -72,14 +73,13 @@ export function CreateFormEstablishments() {
     }, [currentPath]);
 
 
-
     useEffect(() => {
         const orderIndex = fileUrl.map(value => value?.split('=').pop());
 
         const reorderedArray = files.sort((a, b) => orderIndex.indexOf(a.index.toString()) - orderIndex.indexOf(b.index.toString()));
         setFiles([...reorderedArray]);
 
-    },[fileUrl]);
+    }, [fileUrl]);
 
     const handleChange = (event) => {
         const fileList = event.target.files;
@@ -106,7 +106,11 @@ export function CreateFormEstablishments() {
         formData.append("user_id", user_id);
         formData.append("location", location);
 
-        currentPath === 'update' ? await putEstablishments(formData, state.establishment_id) : await postEstablishments(formData);
+       const response = currentPath === 'update' ? await putEstablishments(formData, state.establishment_id) : await postEstablishments(formData);
+
+        if(response){
+            navigate('/my-establishments/pending');
+        }
     }
 
     const onChange = (e) => {

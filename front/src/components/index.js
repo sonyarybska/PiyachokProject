@@ -1,4 +1,3 @@
-import {News} from "./news/News"
 import {AdminApplications} from "./admin-applications/AdminApplications"
 import {CreateFormEstablishments} from "./create-form-establishments/CreateFormEstablishments";
 import {Header} from './header/Header';
@@ -9,7 +8,6 @@ import {Users} from "./users/Users"
 import {UsersEstablishments} from "./users_establishments/UsersEstablishments"
 
 export {
-    News,
     AdminApplications,
     CreateFormEstablishments,
     Header,

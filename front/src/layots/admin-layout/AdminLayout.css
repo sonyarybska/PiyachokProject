@@ -9,7 +9,7 @@
     padding: 20px;
     flex-direction: column;
     row-gap: 30px;
-    align-items: start;
+    align-items: flex-start;
     width: 200px;
 }
 .option-page{

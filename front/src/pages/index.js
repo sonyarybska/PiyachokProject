@@ -7,7 +7,6 @@ import {Establishments} from "./establishments/Establishments";
 import {Favorites} from "./favorites/Favorites";
 import {MyReviewsPage} from "./my-reviews-page/MyReviewsPage";
 import {ResponseInterceptor} from "./response-interceptor/ResponseInterceptor";
-import {Settings} from "./settings/Settings";
 import {PreviewSlider} from "./preview-slider/PreviewSlider";
 
 export {
@@ -20,6 +19,5 @@ export {
     Favorites,
     MyReviewsPage,
     ResponseInterceptor,
-    Settings,
     PreviewSlider
 };

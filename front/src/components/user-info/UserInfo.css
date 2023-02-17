@@ -37,7 +37,7 @@
 
 .select-sort {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     align-items: center;
     margin: 10px;
 }

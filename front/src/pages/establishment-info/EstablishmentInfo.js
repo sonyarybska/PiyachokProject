@@ -6,8 +6,7 @@ import './EstablishmentInfo.css';
 import {fetchOneEstablishment} from "../../services/establishment.service";
 import {addToFavorite, changeFavorite} from "../../helpers/favorite.helper";
 import {getOneEstablishments} from "../../redux/actions/actions";
-import {News, Reviews} from "../../components/index";
-
+import {Reviews} from "../../components/index";
 
 export function EstablishmentInfo() {
     const {one_establishment} = useSelector(state => state.establishmentReducer);
@@ -95,10 +94,7 @@ export function EstablishmentInfo() {
                     </div>
                 }
             </div>}
-            <div className={'news-box'}>
-                <p>News</p>
-                {one_establishment?.user_id === user_id ? <News/> : ''}
-            </div>
+
             <Routes>
                 <Route path={'/'} element={<Reviews establishment_id={one_establishment?.establishment_id}/>}/>
             </Routes>

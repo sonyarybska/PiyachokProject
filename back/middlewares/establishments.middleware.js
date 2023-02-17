@@ -8,7 +8,9 @@ module.exports = {
 
             const data = {...JSON.parse(req.body.data), user_id, location};
 
-            const {error, value} = validator.validate(data);
+            const {error, value} = validator.validate(data,  { abortEarly: false });
+
+            console.log(error)
 
             if (error) {
                 throw new ApiError(error.details[0].message, 400);

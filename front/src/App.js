@@ -3,10 +3,9 @@ import React, {useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
 import './App.css';
 
-
 import {
     AdminMenu, Login, ConfirmationPage, CrudEstablishmentsPage, EstablishmentInfo, Establishments, Favorites,
-    MyReviewsPage, ResponseInterceptor, Settings, PreviewSlider
+    MyReviewsPage, ResponseInterceptor, PreviewSlider
 } from "./pages/index";
 
 import {checkAuth} from "./services/auth.service";
@@ -41,9 +40,6 @@ function App() {
                     </AuthRequest>}/>
                     <Route path={'admin-page/*'} element={<AuthRequest>
                         <AdminMenu/>
-                    </AuthRequest>}/>
-                    <Route path={'settings'} element={<AuthRequest>
-                        <Settings/>
                     </AuthRequest>}/>
                     <Route path={'favorites'} element={<AuthRequest>
                         <Favorites/>

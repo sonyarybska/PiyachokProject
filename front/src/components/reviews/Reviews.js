@@ -84,9 +84,9 @@ export function Reviews({establishment_id}) {
             <ReactStars count={5} value={review?.rating}
                         onChange={onChangeRating}/>
             <form className={'input-form'} onSubmit={createReview} action="">
-                <input onChange={onChange} name={'text'}
+                <input placeholder={'Text your review'} onChange={onChange} name={'text'}
                        value={review.text} type="text"/>
-                <input onChange={onChange} name={'check'}
+                <input placeholder={'Enter average check'} onChange={onChange} name={'check'}
                        value={review.check} type="number"/>
 
                 <button>Send</button>

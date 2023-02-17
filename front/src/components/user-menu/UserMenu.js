@@ -43,12 +43,6 @@ export function UserMenu({user, logoutResponse}) {
                                 <NavLink style={({ isActive }) => ({
                                     color: isActive ? 'white' : 'black',
                                     background: isActive ? 'black' : 'white',
-                                })}  to={'settings'}>
-                                    {<li>Settings</li>}
-                                </NavLink>
-                                <NavLink style={({ isActive }) => ({
-                                    color: isActive ? 'white' : 'black',
-                                    background: isActive ? 'black' : 'white',
                                 })}  to={'favorites'}>
                                     {<li>My favorites</li>}
                                 </NavLink>

@@ -33,7 +33,10 @@ const createEstablishmentValidator = Joi.object({
     phone: Joi.string()
         .trim()
         .required()
-        .regex(/(?=.*\+[0-9]{3}\s?[0-9]{2}\s?[0-9]{3}\s?[0-9]{4,5}$)/i),
+        .regex(/(?=.*\+[0-9]{3}\s?[0-9]{2}\s?[0-9]{3}\s?[0-9]{4,5}$)/i)
+        .messages({
+            'string.pattern.base': "The number must be in the following format: +380986649500",
+        }),
 
     user_id: Joi.number()
         .required()
@@ -72,7 +75,10 @@ const updateEstablishmentValidator = Joi.object({
     phone: Joi.string()
         .trim()
         .required()
-        .regex(/(?=.*\+[0-9]{3}\s?[0-9]{2}\s?[0-9]{3}\s?[0-9]{4,5}$)/i),
+        .regex(/(?=.*\+[0-9]{3}\s?[0-9]{2}\s?[0-9]{3}\s?[0-9]{4,5}$)/i)
+        .messages({
+            'string.pattern.base': "The number must be in the following format: +380986649500",
+        }),
 
     user_id: Joi.number()
         .required(),

@@ -19,7 +19,6 @@ const establishmentsRouter = require('./routers/establishments.router');
 const userRouter = require('./routers/user.router');
 const authRouter = require('./routers/auth.router');
 const reviewRouter = require('./routers/review.router');
-const newsRouter = require('./routers/news.router');
 const favoriteRouter = require('./routers/favorite.router');
 
 app.use(cookieParser());
@@ -42,7 +41,6 @@ app.use('/establishments', establishmentsRouter);
 app.use('/users', userRouter);
 app.use('/auth', authRouter);
 app.use('/reviews', reviewRouter);
-app.use('/news', newsRouter);
 app.use('/favorite', favoriteRouter);
 
 

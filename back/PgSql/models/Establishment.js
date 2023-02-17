@@ -1,7 +1,6 @@
 const {DataTypes, Sequelize} = require('sequelize');
 
 module.exports = (client) => {
-
     const Establishment = client.define(
         'establishment', {
             establishment_id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
@@ -13,7 +12,6 @@ module.exports = (client) => {
             location: {type: DataTypes.STRING(200)},
             start_work: {type: DataTypes.TIME},
             end_work: {type: DataTypes.TIME},
-            view_statistics: {type: DataTypes.INTEGER, defaultValue: 0},
             tags: {
                 type: DataTypes.ARRAY(DataTypes.STRING)
             },
